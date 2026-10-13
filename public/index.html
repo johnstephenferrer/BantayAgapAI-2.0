@@ -1,0 +1,1934 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <title>Bantay AgapAI</title>
+  <meta name="description" content="Bantay AgapAI — Barangay 135 digital governance portal.">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    /* Hide scrollbar tracks while preserving page and panel scrolling */
+    html {
+      scrollbar-width: none;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Keep service images small and contained inside their icons */
+    #serviceGrid .service-card .service-icon {
+      width: 42px !important;
+      height: 42px !important;
+      min-width: 42px !important;
+      min-height: 42px !important;
+      max-width: 42px !important;
+      max-height: 42px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      overflow: hidden !important;
+      position: relative !important;
+      flex-shrink: 0 !important;
+      border-radius: 50% !important;
+    }
+
+    #serviceGrid .service-card .service-icon img {
+      display: block !important;
+      position: static !important;
+      width: 34px !important;
+      height: 34px !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      max-width: 34px !important;
+      max-height: 34px !important;
+      object-fit: contain !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      transform: none !important;
+    }
+
+    /* Compact hero stats card and its image icons */
+    #heroStats {
+      width: 230px;
+      padding: 10px 13px 8px;
+    }
+
+    #heroStats .stats-card-heading {
+      margin-bottom: 2px;
+    }
+
+    #heroStats .stats-card-heading > p,
+    #heroStats .stats-disclaimer {
+      display: none;
+    }
+
+    #heroStats .hero-stat {
+      gap: 9px;
+      padding: 4px 0;
+    }
+
+    #heroStats .stat-icon {
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      flex: 0 0 30px;
+    }
+
+    #heroStats .hero-stat b {
+      font-size: 15px;
+    }
+
+    #heroStats .hero-stat small {
+      margin-top: 2px;
+      font-size: 9px;
+    }
+
+    #heroStats .stat-icon img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    /* FAQ section */
+    #faqs .faq-intro {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      text-align: center;
+    }
+
+    #faqs .faq-intro label {
+      color: var(--deep-blue, #1850D9);
+    }
+
+    #faqs .faq-intro h2 {
+      margin: 10px 0;
+    }
+
+    #faqs .faq-intro p {
+      color: var(--muted, #6075a0);
+    }
+
+    #faqs .faq-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(250px, .85fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    #faqs .faq-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    #faqs .faq-item {
+      overflow: hidden;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 14px;
+      background: var(--surface, #fff);
+      box-shadow: 0 8px 22px rgba(16, 42, 104, .05);
+    }
+
+    #faqs .faq-item summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 17px 19px;
+      color: var(--navy, #08245f);
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    #faqs .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    #faqs .faq-item summary::after {
+      content: "+";
+      flex: 0 0 28px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #edf5ff;
+      color: var(--primary-blue, #1C71EA);
+      font-size: 20px;
+      font-weight: 500;
+      transition: transform 260ms ease, background-color 260ms ease, color 260ms ease;
+    }
+
+    #faqs .faq-item[open] summary::after {
+      content: "−";
+      color: var(--pink, #D94A65);
+      background: #fff0f3;
+    }
+
+    #faqs .faq-answer {
+      padding: 0 19px 18px;
+      color: var(--muted, #6075a0);
+      line-height: 1.65;
+      overflow: hidden;
+    }
+
+    #faqs .faq-answer a,
+    #faqs .official-link {
+      color: var(--deep-blue, #1850D9);
+      font-weight: 700;
+    }
+
+    #faqs .official-links {
+      padding: 24px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 18px;
+      background: linear-gradient(160deg, #f4faff, #fff 70%);
+    }
+
+    #faqs .official-links h3 {
+      margin: 0 0 8px;
+      color: var(--navy, #08245f);
+      font-size: 21px;
+    }
+
+    #faqs .official-links > p {
+      margin: 0 0 16px;
+      color: var(--muted, #6075a0);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    #faqs .official-link-list {
+      display: grid;
+      gap: 10px;
+      max-height: 420px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 2px 8px 4px 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-blue, #1C71EA) #edf5ff;
+    }
+
+    #faqs .official-link-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #faqs .official-link-list::-webkit-scrollbar-track {
+      border-radius: 8px;
+      background: #edf5ff;
+    }
+
+    #faqs .official-link-list::-webkit-scrollbar-thumb {
+      border: 2px solid #edf5ff;
+      border-radius: 8px;
+      background: var(--primary-blue, #1C71EA);
+    }
+
+    #faqs .official-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 0;
+      padding: 14px 15px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 12px;
+      background: #fff;
+      text-decoration: none;
+    }
+
+    #faqs .official-link:hover {
+      border-color: var(--primary-blue, #1C71EA);
+      transform: translateY(-1px);
+    }
+
+    #faqs .official-link span {
+      display: block;
+      color: var(--muted, #6075a0);
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 3px;
+    }
+
+    #faqs .official-link b {
+      color: var(--pink, #D94A65);
+    }
+
+    @media (max-width: 760px) {
+      #faqs .faq-layout {
+        grid-template-columns: 1fr;
+      }
+
+      #faqs .official-link-list {
+        max-height: 360px;
+      }
+    }
+
+    /* About section: Did You Know and clickable developer profiles */
+    #about .about-team-layout {
+      display: block;
+      margin-top: 30px;
+    }
+
+    #about .did-you-know {
+      max-width: 680px;
+      margin: 0 0 34px;
+      padding: 22px 24px;
+      border: 1px solid var(--line, #dce9fa);
+      border-left: 5px solid var(--gold, #E8C95A);
+      border-radius: 16px;
+      background: linear-gradient(135deg, #f2f9ff, #fff8f8);
+    }
+
+    #about .did-you-know h3 {
+      margin: 0 0 8px;
+      color: var(--pink, #D94A65);
+      font-family: Poppins, Inter, sans-serif;
+      font-size: 20px;
+    }
+
+    #about .did-you-know p {
+      margin: 0;
+      color: var(--muted, #6075a0);
+      line-height: 1.65;
+    }
+
+    #about .developer-heading-wrap {
+      margin-bottom: 14px;
+    }
+
+    #about .developer-heading {
+      margin: 0 0 3px;
+      color: var(--navy, #08245f);
+      font-family: Poppins, Inter, sans-serif;
+      font-size: 23px;
+    }
+
+    #about .developer-heading-wrap p {
+      margin: 0;
+      color: var(--muted, #6075a0);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    #about .developer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    #about .developer-card {
+      min-width: 0;
+      overflow: hidden;
+      padding: 10px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 14px;
+      background: var(--surface, #fff);
+      color: var(--navy, #08245f);
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    }
+
+    #about .developer-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-blue, #1C71EA);
+      box-shadow: 0 12px 26px rgba(16, 42, 104, .12);
+    }
+
+    #about .developer-card img {
+      display: block;
+      width: 100%;
+      height: 175px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #dff3ff, #fff0f3);
+      object-fit: contain;
+      object-position: center bottom;
+    }
+
+    #about .developer-card strong {
+      display: block;
+      color: var(--navy, #08245f);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    #about .developer-card .developer-position {
+      display: block;
+      margin-top: 5px;
+      color: var(--pink, #D94A65);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    #about .developer-card .developer-link {
+      display: block;
+      margin-top: 5px;
+      color: var(--deep-blue, #1850D9);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    #developerProfile {
+      width: min(440px, calc(100% - 32px));
+      padding: 28px;
+      border: 1px solid var(--line, #dce9fa);
+      border-top: 4px solid var(--gold, #E8C95A);
+      border-radius: 18px;
+      background: var(--surface, #fff);
+      color: var(--navy, #08245f);
+      box-shadow: 0 24px 70px rgba(8, 36, 95, .28);
+    }
+
+    #developerProfile::backdrop {
+      background: rgba(8, 36, 95, .62);
+      backdrop-filter: blur(3px);
+    }
+
+    #developerProfile[open] {
+      animation: developerProfileIn 220ms ease both;
+    }
+
+    #developerProfile h3 {
+      margin: 0 0 8px;
+      color: var(--navy, #08245f);
+      font-family: Poppins, Inter, sans-serif;
+      font-size: 22px;
+    }
+
+    #developerProfile .profile-role {
+      margin: 0 0 12px;
+      color: var(--pink, #D94A65);
+      font-weight: 700;
+    }
+
+    #developerProfile .profile-bio {
+      margin: 0 0 20px;
+      color: var(--muted, #6075a0);
+      line-height: 1.65;
+    }
+
+    #developerProfile .profile-close {
+      padding: 10px 17px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--primary-blue, #1C71EA);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @keyframes developerProfileIn {
+      from { opacity: 0; transform: translateY(10px) scale(.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 760px) {
+      #about .developer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 460px) {
+      #about .developer-grid {
+        gap: 10px;
+      }
+
+      #about .developer-card {
+        padding: 8px;
+      }
+
+      #about .developer-card img {
+        height: 145px;
+      }
+
+      #developerProfile {
+        padding: 22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #about .developer-card,
+      #developerProfile[open] {
+        animation: none;
+        transition: none;
+      }
+    }
+
+    /* First-visit welcome popup */
+    #welcomeOverlay {
+      position: fixed;
+      z-index: 10000;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      overflow: auto;
+      background: rgba(8, 36, 95, .66);
+      backdrop-filter: blur(5px);
+      animation: welcomeOverlayIn 260ms ease both;
+    }
+
+    #welcomeOverlay[hidden] { display: none; }
+    body.welcome-open { overflow: hidden; }
+
+    #welcomeOverlay .welcome-panel {
+      position: relative;
+      width: min(1040px, 100%);
+      max-height: min(760px, 86vh);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 24px;
+      border: 1px solid var(--line, #dce9fa);
+      border-top: 4px solid var(--gold, #E8C95A);
+      border-radius: 20px;
+      background: var(--surface, #fff);
+      box-shadow: 0 24px 70px rgba(8, 36, 95, .28);
+      scrollbar-width: none;
+    }
+
+    #welcomeOverlay .welcome-panel::-webkit-scrollbar {
+      display: none;
+    }
+
+    #welcomeOverlay .welcome-close {
+      position: sticky;
+      z-index: 2;
+      top: 0;
+      float: right;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      margin: -12px -12px 0 12px;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: var(--navy, #08245f);
+      background: #edf5ff;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background-color 180ms ease, transform 180ms ease;
+    }
+
+    #welcomeOverlay .welcome-close:hover {
+      background: #fff0f3;
+      color: var(--pink, #D94A65);
+      transform: rotate(5deg);
+    }
+
+    #welcomeOverlay .welcome-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 12px;
+      color: var(--navy, #08245f);
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+
+    #welcomeOverlay .welcome-brand img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+
+    #welcomeOverlay .welcome-kicker {
+      margin: 0 0 7px;
+      color: var(--pink, #D94A65);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    #welcomeOverlay .welcome-heading {
+      margin: 0;
+      color: var(--navy, #08245f);
+      font-family: Poppins, Inter, sans-serif;
+      font-size: clamp(25px, 4vw, 34px);
+      line-height: 1.15;
+    }
+
+    #welcomeOverlay .welcome-heading span { color: var(--primary-blue, #1C71EA); }
+
+    #welcomeOverlay .welcome-content-grid {
+      display: grid;
+      grid-template-columns: minmax(270px, .82fr) minmax(0, 1.18fr);
+      gap: 16px;
+      margin-top: 20px;
+      align-items: start;
+    }
+
+    #welcomeOverlay .welcome-preview-column {
+      padding: 12px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 16px;
+      background: linear-gradient(145deg, #f2f9ff, #fff8f8);
+    }
+
+    #welcomeOverlay .welcome-video-wrap {
+      overflow: hidden;
+      padding: 6px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    #welcomeOverlay .welcome-video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border-radius: 8px;
+      background: #08245f;
+      object-fit: cover;
+    }
+
+    #welcomeOverlay .welcome-fact-card {
+      display: flex;
+      min-height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      padding: 22px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 16px;
+      background: linear-gradient(145deg, #f2f9ff, #fff8f8);
+    }
+
+    #welcomeOverlay .welcome-fact-label {
+      margin: 0 0 9px;
+      color: var(--pink, #D94A65);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+
+    #welcomeOverlay .welcome-fact-card h2 {
+      margin: 0 0 10px;
+      color: var(--navy, #08245f);
+      font-family: Poppins, Inter, sans-serif;
+      font-size: clamp(20px, 2.4vw, 27px);
+      line-height: 1.2;
+    }
+
+    #welcomeOverlay .welcome-fact-card p:last-child {
+      margin: 0;
+      color: var(--muted, #6075a0);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    #welcomeOverlay .welcome-developers {
+      margin-top: 18px;
+    }
+
+    #welcomeOverlay .team-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 12px;
+    }
+
+    #welcomeOverlay .team-heading h2 {
+      margin: 0;
+      color: var(--navy, #08245f);
+      font-family: Poppins, Inter, sans-serif;
+      font-size: 21px;
+    }
+
+    #welcomeOverlay .team-heading p {
+      margin: 0;
+      color: var(--muted, #6075a0);
+      font-size: 12px;
+    }
+
+    #welcomeOverlay .welcome-team {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    #welcomeOverlay .welcome-member {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 10px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 13px;
+      background: #fff;
+      animation: welcomeMemberIn 360ms ease both;
+    }
+
+    #welcomeOverlay .welcome-member:nth-child(2) { animation-delay: 50ms; }
+    #welcomeOverlay .welcome-member:nth-child(3) { animation-delay: 100ms; }
+    #welcomeOverlay .welcome-member:nth-child(4) { animation-delay: 150ms; }
+
+    #welcomeOverlay .welcome-member-photo {
+      display: block;
+      width: 100%;
+      height: 155px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      border-radius: 9px;
+      background: linear-gradient(145deg, #dff3ff, #fff0f3);
+      object-fit: contain;
+      object-position: center bottom;
+    }
+
+    #welcomeOverlay .welcome-member h3 {
+      margin: 0 0 4px;
+      color: var(--navy, #08245f);
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    #welcomeOverlay .welcome-member .welcome-role {
+      margin: 0 0 5px;
+      color: var(--deep-blue, #1850D9);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    #welcomeOverlay .welcome-member .welcome-bio {
+      margin: 0;
+      color: var(--muted, #6075a0);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    #welcomeOverlay.is-closing { animation: welcomeOverlayOut 220ms ease both; }
+    #welcomeOverlay.is-closing .welcome-panel { animation: welcomePanelOut 220ms ease both; }
+
+    @keyframes welcomeOverlayIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes welcomeOverlayOut {
+      to { opacity: 0; }
+    }
+
+    @keyframes welcomeMemberIn {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes welcomePanelOut {
+      to { opacity: 0; transform: translateY(7px) scale(.99); }
+    }
+
+    @media (max-width: 820px) {
+      #welcomeOverlay .welcome-content-grid { grid-template-columns: 1fr; }
+      #welcomeOverlay .welcome-preview-column { max-width: 620px; width: 100%; margin: 0 auto; }
+      #welcomeOverlay .welcome-team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 600px) {
+      #welcomeOverlay { padding: 10px; }
+      #welcomeOverlay .welcome-panel {
+        max-height: 90vh;
+        padding: 20px 15px;
+        border-radius: 16px;
+      }
+      #welcomeOverlay .welcome-member-photo { height: 140px; }
+      #welcomeOverlay .team-heading { display: block; }
+      #welcomeOverlay .team-heading p { margin-top: 3px; }
+    }
+
+    @media (max-width: 460px) {
+      #welcomeOverlay .welcome-team { grid-template-columns: 1fr; }
+      #welcomeOverlay .welcome-member-photo { height: 180px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #welcomeOverlay,
+      #welcomeOverlay .welcome-member,
+      #welcomeOverlay.is-closing,
+      #welcomeOverlay.is-closing .welcome-panel { animation: none; }
+      #welcomeOverlay .welcome-close { transition: none; }
+    }
+
+    /* Reveal content on entry; fade and blur it out below the screen when scrolling up */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(18px) scale(.97);
+      filter: blur(3px);
+      transition: opacity 420ms ease, transform 520ms cubic-bezier(.2, .8, .2, 1), filter 420ms ease;
+      will-change: opacity, transform, filter;
+    }
+
+    .scroll-reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-reveal,
+      .scroll-reveal.is-visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="welcome-panel">
+      <button class="welcome-close" type="button" aria-label="Close welcome popup">×</button>
+      <div class="welcome-brand">
+        <img src="/bantay-logo.png" alt="">
+        <span>BANTAY AGAPAI</span>
+      </div>
+      <p class="welcome-kicker">Barangay 135 · Balut, Tondo</p>
+      <h1 class="welcome-heading" id="welcomeTitle">Welcome to <span>Bantay AgapAI</span></h1>
+
+      <div class="welcome-content-grid">
+        <section class="welcome-preview-column" aria-label="Bantay AgapAI website preview">
+          <div class="welcome-video-wrap">
+            <video
+  class="welcome-video"
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="metadata"
+  aria-label="Looping preview of the Bantay AgapAI website"
+>
+  <source src="/welcome.mp4" type="video/mp4">
+</video>
+          </div>
+        </section>
+
+        <aside class="welcome-fact-card" aria-labelledby="welcomeFactTitle">
+          <p class="welcome-fact-label">DID YOU KNOW?</p>
+          <h2 id="welcomeFactTitle">This website was built by four students to help local communities.</h2>
+          <p>We created Bantay AgapAI to make barangay services, request tracking, project updates, and practical guidance easier for residents to find in one place—supporting transparency and a stronger connection between residents and their barangay.</p>
+        </aside>
+      </div>
+
+      <section class="welcome-developers" aria-labelledby="welcomeDevelopersTitle">
+        <div class="team-heading">
+          <h2 id="welcomeDevelopersTitle">Meet the Developers</h2>
+          <p>TEAM DIGNITY · REPRESENTING SPIC</p>
+        </div>
+
+        <div class="welcome-team">
+          <article class="welcome-member">
+            <img class="welcome-member-photo" src="/ferrer.png" alt="John Stephen Ferrer">
+            <div>
+              <h3>JOHN STEPHEN FERRER</h3>
+              <p class="welcome-role">Lead Web Developer</p>
+            </div>
+          </article>
+
+          <article class="welcome-member">
+            <img class="welcome-member-photo" src="/cagunot.png" alt="Sofia Cagunot">
+            <div>
+              <h3>SOFIA CAGUNOT</h3>
+              <p class="welcome-role">Technical Support / QA Tester</p>
+            </div>
+          </article>
+
+          <article class="welcome-member">
+            <img class="welcome-member-photo" src="/gacus.png" alt="Yuanne Kighzer Gacus">
+            <div>
+              <h3>YUANNE KIGHZER GACUS</h3>
+              <p class="welcome-role">Technical Support / Deployment Specialist</p>
+            </div>
+          </article>
+
+          <article class="welcome-member">
+            <img class="welcome-member-photo" src="/karl.png" alt="Karl Christian Montecillo">
+            <div>
+              <h3>KARL CHRISTIAN MONTECILLO</h3>
+              <p class="welcome-role">UI/UX Designer / Content Developer</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <header class="hero" id="home">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+    <div class="container">
+      <nav class="nav">
+        <a class="brand" href="#home">
+          <div class="brand-mark">
+            <img src="/bantay-logo.png" alt="Bantay AgapAI logo">
+          </div>
+
+          <div>
+            <b>BANTAY AGAPAI</b>
+            <small>A BARANGAY DIGITAL GOVERNANCE PLATFORM</small>
+          </div>
+        </a>
+
+        <div class="nav-links">
+          <a class="active" href="#home">HOME</a>
+          <a href="#services">SERVICES</a>
+          <a href="#projects">PROJECTS</a>
+          <a href="#faqs">FAQS</a>
+          <a href="#about">ABOUT US</a>
+          <a href="#complaints">CONTACT US</a>
+        </div>
+
+        <div class="nav-actions">
+          <div class="location-pill" id="locationBtn" aria-label="Current barangay: Barangay 135">
+            <span class="location-pin" aria-hidden="true">📍</span>
+            <span class="location-copy">
+              <b>Barangay 135</b>
+              <small>Balut, Tondo, Manila</small>
+            </span>
+          </div>
+
+          <button class="pink-btn" id="loginBtn" type="button">
+            RESIDENT LOGIN →
+          </button>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <div class="eyebrow">Bantay. Gabay. Serbisyong Maaasahan.</div>
+
+        <h1>
+          Empowering Barangays<br>
+          Through <span>Digital Governance</span>
+        </h1>
+
+        <p>
+          A digital hub for a more transparent, responsive, and people-centered
+          barangay community in Barangay 135, Balut, Tondo, Manila.
+        </p>
+
+        <div class="hero-actions">
+          <button
+            class="pink-btn"
+            onclick="document.querySelector('#services').scrollIntoView({behavior:'smooth'})"
+          >
+            Explore Services →
+          </button>
+
+          <button
+            class="outline-btn"
+            onclick="document.querySelector('#projects').scrollIntoView({behavior:'smooth'})"
+          >
+            View Barangay Projects
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-stats" id="heroStats">
+        <div class="stats-card-heading">
+          <div class="stats-heading-row">
+            <span class="stats-title">Barangay Snapshot</span>
+            <span class="stats-demo-tag">DEMO ESTIMATES</span>
+          </div>
+        </div>
+
+        <div class="hero-stat">
+          <span class="stat-icon" aria-hidden="true">
+            <img src="/resident.png" alt="">
+          </span>
+          <div>
+            <b>15,230</b>
+            <small>Estimated Residents</small>
+          </div>
+        </div>
+
+        <div class="hero-stat">
+          <span class="stat-icon" aria-hidden="true">
+            <img src="/services.png" alt="">
+          </span>
+          <div>
+            <b>25+</b>
+            <small>Barangay Services</small>
+          </div>
+        </div>
+
+        <div class="hero-stat">
+          <span class="stat-icon" aria-hidden="true">
+            <img src="/projects.png" alt="">
+          </span>
+          <div>
+            <b>8</b>
+            <small>Ongoing Projects</small>
+          </div>
+        </div>
+
+        <div class="hero-stat">
+          <span class="stat-icon" aria-hidden="true">
+            <img src="/satisfaction.png" alt="">
+          </span>
+          <div>
+            <b>95%</b>
+            <small>Demo Satisfaction Estimate</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- BARANGAY SERVICES -->
+    <section id="services" class="section services-section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <label>QUICK ACCESS</label>
+            <h2>Barangay Services</h2>
+            <p>
+              Find the right office, requirements, and procedures for your concern.
+            </p>
+          </div>
+
+          <a href="#guide">Ask the AI Guide →</a>
+        </div>
+
+        <div id="serviceGrid" class="service-grid"></div>
+      </div>
+    </section>
+
+    <!-- BARANGAY PROJECTS -->
+    <section id="projects" class="section projects-section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <label>BARANGAY PROJECTS</label>
+            <h2>Ongoing Projects</h2>
+            <p>
+              Track project progress and updates for a more transparent community.
+            </p>
+          </div>
+
+          <button class="link-btn" id="refreshProjects">
+            Refresh ↻
+          </button>
+        </div>
+
+        <div class="project-showcase">
+          <div id="projectGrid" class="project-grid"></div>
+
+          <button class="link-btn hidden" id="viewAllProjects" type="button">
+            View All Projects →
+          </button>
+
+          <div class="project-promo">
+            <div>
+              <strong>Together for a Better, Brighter Barangay 135</strong>
+              <span>
+                Transparent projects. Accessible services. A stronger community.
+              </span>
+
+              <button
+                class="pink-btn"
+                onclick="document.querySelector('#guide').scrollIntoView({behavior:'smooth'})"
+              >
+                Learn More About Bantay AgapAI →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI BARANGAY GUIDE -->
+    <section id="guide" class="section guide-section">
+      <div class="container">
+        <div class="guide-shell">
+          <div class="guide-main">
+            <div class="guide-heading">
+              <div class="bot">
+                <img
+                  src="/guide-robot.png"
+                  alt="AI Barangay Guide assistant"
+                >
+              </div>
+
+              <div>
+                <h2>AI Barangay Guide</h2>
+                <p>
+                  Ask about barangay services, offices, requirements, and procedures.
+                </p>
+              </div>
+
+              <span class="ai-status" id="aiStatus">
+                Checking AI…
+              </span>
+            </div>
+
+            <form id="guideForm" class="guide-form">
+              <input
+                id="question"
+                placeholder='Try: "Nawawala yung ID ko, saan ako pupunta?"'
+                required
+              >
+              <button>→</button>
+            </form>
+
+            <div class="chips">
+              <button data-q="Kumuha ng Barangay Clearance">
+                Barangay Clearance
+              </button>
+
+              <button data-q="Mag-report ng reklamo">
+                Mag-report ng reklamo
+              </button>
+
+              <button data-q="Emergency contact number">
+                Emergency
+              </button>
+
+              <button data-q="Nawawala yung ID ko, saan ako pupunta?">
+                Nawalang ID
+              </button>
+
+              <button data-q="Saan ako makakakuha ng assistance?">
+                Assistance
+              </button>
+            </div>
+
+            <div id="guideResult" class="guide-result hidden"></div>
+          </div>
+
+          <aside class="guide-sidebar">
+            <h3>Common Concerns</h3>
+
+            <button data-q="Kumuha ng Barangay Clearance">
+              📄 Documents <span>›</span>
+            </button>
+
+            <button data-q="Mag-report ng reklamo">
+              💬 Complaints <span>›</span>
+            </button>
+
+            <button data-q="Saan ako makakakuha ng assistance?">
+              🤝 Assistance Programs <span>›</span>
+            </button>
+
+            <button data-q="Emergency contact number">
+              🚨 Emergency <span>›</span>
+            </button>
+
+            <button data-q="Business permit">
+              🏢 Business Permits <span>›</span>
+            </button>
+
+            <button data-q="Health service">
+              ♥ Health Services <span>›</span>
+            </button>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORT A CONCERN -->
+    <section id="complaints" class="section form-section">
+      <div class="container narrow">
+        <div class="section-head">
+          <div>
+            <label>RESIDENT SUPPORT</label>
+            <h2>Report a Concern</h2>
+            <p>
+              Submit a community concern and receive a reference number for tracking.
+            </p>
+          </div>
+        </div>
+
+        <form id="complaintForm" class="form-card">
+          <div class="form-grid">
+            <label>
+              Name
+              <input name="name" required>
+            </label>
+
+            <label>
+              Contact (optional)
+              <input name="contact">
+            </label>
+
+            <label>
+              Category
+              <select name="category">
+                <option>General Concern</option>
+                <option>Noise / Community</option>
+                <option>Environment</option>
+                <option>Safety</option>
+                <option>Other</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            Description
+            <textarea
+              name="description"
+              rows="5"
+              required
+              placeholder="Describe what happened and where."
+            ></textarea>
+          </label>
+
+          <button class="pink-btn">Submit Concern</button>
+          <div id="complaintMessage" class="message"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- TRACK A REQUEST -->
+    <section id="track" class="section track-section">
+      <div class="container narrow">
+        <div class="section-head">
+          <div>
+            <label>TRACKING</label>
+            <h2>Track a Request</h2>
+            <p>
+              Enter the reference number you received after submitting a request or complaint.
+            </p>
+          </div>
+        </div>
+
+        <form id="trackForm" class="track-form">
+          <input
+            id="trackId"
+            placeholder="Example: REQ_xxx or CMP_xxx"
+            required
+          >
+          <button class="blue-btn">Track</button>
+        </form>
+
+        <div id="trackResult"></div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section id="faqs" class="section faq-section">
+      <div class="container">
+        <div class="faq-intro">
+          <label>NEED A QUICK ANSWER?</label>
+          <h2>Frequently Asked Questions</h2>
+          <p>Quick guidance on barangay services, submitting a concern, and checking a request.</p>
+        </div>
+
+        <div class="faq-layout">
+          <div class="faq-list" aria-label="Frequently asked questions">
+            <details class="faq-item">
+              <summary>How do I track a request I submitted?</summary>
+              <div class="faq-answer">
+                Enter the reference number you received after submitting your request or concern in the
+                <a href="#track">Track a Request</a> section.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Where can I find the requirements for a barangay service?</summary>
+              <div class="faq-answer">
+                Browse the <a href="#services">Barangay Services</a> section or ask the
+                <a href="#guide">AI Barangay Guide</a> about the service you need.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>How can I submit a concern or complaint?</summary>
+              <div class="faq-answer">
+                Use the <a href="#complaints">Report a Concern</a> form on this website. Keep the
+                reference number shown after submitting so you can check it later.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Where can I find official barangay and government information?</summary>
+              <div class="faq-answer">
+                Use the official government links beside these FAQs. For Barangay 135-specific details,
+                follow the barangay's verified contact channel.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>How do I request a Barangay Clearance?</summary>
+              <div class="faq-answer">
+                Contact or visit your barangay hall to confirm the current requirements and fees, since
+                they can vary by location and purpose. For Manila barangay information, start with the
+                <a href="https://manila.gov.ph/mbb/page/187/" target="_blank" rel="noopener noreferrer">Manila Barangay Bureau</a>.
+              </div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Where can I find health services or emergency help?</summary>
+              <div class="faq-answer">
+                For city health centers and public hospital information, visit
+                <a href="https://manila.gov.ph/health-services/page/196/" target="_blank" rel="noopener noreferrer">Manila Health Services</a>.
+                For emergency contact numbers, check the official
+                <a href="https://ehotlines.e.gov.ph/" target="_blank" rel="noopener noreferrer">eGovPH Emergency Hotlines</a> directory.
+              </div>
+            </details>
+          </div>
+
+          <aside class="official-links" aria-labelledby="official-links-title">
+            <h3 id="official-links-title">Useful Official Links</h3>
+            <p>Explore trusted government information connected to barangay services and resident support. Scroll the list to see more.</p>
+
+            <div class="official-link-list" aria-label="Scrollable government links">
+              <a
+                class="official-link"
+                href="https://manila.gov.ph/mbb/page/187/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>Barangay Clearance &amp; Local Barangay Info</strong>
+                  <span>Find Manila barangay information; confirm current clearance requirements with your barangay.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+
+              <a
+                class="official-link"
+                href="https://car.dilg.gov.ph/wp-content/uploads/2024/11/AHRC-KP-Project-Enhanced-KP-Training-Manual-Signed.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>Barangay Complaints &amp; Dispute Resolution</strong>
+                  <span>DILG guide to Katarungang Pambarangay and community-level dispute settlement.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+
+              <a
+                class="official-link"
+                href="https://aics.dswd.gov.ph/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>Social Assistance Program (DSWD AICS)</strong>
+                  <span>Learn about DSWD assistance for people and families facing a crisis.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+
+              <a
+                class="official-link"
+                href="https://ehotlines.e.gov.ph/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>Emergency Assistance &amp; Hotlines</strong>
+                  <span>Find official emergency contact numbers, including the national 911 hotline.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+
+              <a
+                class="official-link"
+                href="https://manila.gov.ph/health-services/page/196/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>Health Services in Manila</strong>
+                  <span>Find city health center, district hospital, and public health information.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+
+              <a
+                class="official-link"
+                href="https://boi.gov.ph/how-to-setup-business/setting-up/business-process-business-permit/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>Business Permits</strong>
+                  <span>Learn more about the business permit process.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+
+              <a
+                class="official-link"
+                href="https://www.manila.gov.ph/wp-content/uploads/2021/10/2021-CITIZENS-CHARTER-HANDBOOK-BOP.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>Manila Bureau of Permits Citizen’s Charter</strong>
+                  <span>Read the City of Manila’s published Bureau of Permits service guide.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+
+              <a
+                class="official-link"
+                href="https://ncr.dilg.gov.ph/programs/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>DILG–NCR</strong>
+                  <span>Programs and local government information.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+
+              <a
+                class="official-link"
+                href="https://e.gov.ph/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>
+                  <strong>eGovPH</strong>
+                  <span>Explore national and local government services.</span>
+                </span>
+                <b aria-hidden="true">↗</b>
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT AND MEET THE DEVELOPERS -->
+    <section id="about" class="section about-section">
+      <div class="container">
+        <label>ABOUT BANTAY AGAPAI</label>
+        <h2>One digital place for barangay information.</h2>
+        <p>Bantay AgapAI is designed to help residents find the correct service, understand where to go, submit concerns, track references, and monitor barangay projects.</p>
+
+        <div class="about-team-layout">
+          <aside class="did-you-know scroll-reveal" aria-labelledby="didYouKnowTitle">
+            <h3 id="didYouKnowTitle">Did You Know?</h3>
+            <p>This website was built by four students to promote transparency by making barangay services, request tracking, project updates, and helpful community information easier for residents to find.</p>
+          </aside>
+
+          <div class="developers-side">
+            <div class="developer-heading-wrap scroll-reveal">
+              <h3 class="developer-heading">Meet the Developers</h3>
+              <p>TEAM DIGNITY · REPRESENTING SPIC</p>
+            </div>
+
+            <div class="developer-grid" aria-label="Meet the developers">
+              <button class="developer-card scroll-reveal" type="button" data-name="John Stephen Ferrer" data-role="Lead Web Developer" data-bio="A Grade 12 ICT student and school ICT representative at SUDECO Polytechnic Integrated College, aspiring to become a Computer Engineer.">
+                <img src="/ferrer.png" alt="John Stephen Ferrer">
+                <strong>JOHN STEPHEN FERRER</strong>
+                <span class="developer-position">Lead Web Developer</span>
+                <span class="developer-link">View profile ↗</span>
+              </button>
+
+              <button class="developer-card scroll-reveal" type="button" data-name="Sofia Cagunot" data-role="Technical Support / QA Tester" data-bio="A Grade 12 ICT student at SUDECO Polytechnic Integrated College and a classmate of John Stephen, aspiring to become a Software Developer.">
+                <img src="/cagunot.png" alt="Sofia Cagunot">
+                <strong>SOFIA CAGUNOT</strong>
+                <span class="developer-position">Technical Support / QA Tester</span>
+                <span class="developer-link">View profile ↗</span>
+              </button>
+
+              <button class="developer-card scroll-reveal" type="button" data-name="Yuanne Kighzer Gacus" data-role="Technical Support / Deployment Specialist" data-bio="A Grade 12 ICT student at SUDECO Polytechnic Integrated College and a classmate of John Stephen, aspiring to pursue a career in IT.">
+                <img src="/gacus.png" alt="Yuanne Kighzer Gacus">
+                <strong>YUANNE KIGHZER GACUS</strong>
+                <span class="developer-position">Technical Support / Deployment Specialist</span>
+                <span class="developer-link">View profile ↗</span>
+              </button>
+
+              <button class="developer-card scroll-reveal" type="button" data-name="Karl Christian Montecillo" data-role="UI/UX Designer / Content Developer" data-bio="A Grade 12 ICT student at SUDECO Polytechnic Integrated College and a classmate of John Stephen, aspiring to pursue a career in IT.">
+                <img src="/karl.png" alt="Karl Christian Montecillo">
+                <strong>KARL CHRISTIAN MONTECILLO</strong>
+                <span class="developer-position">UI/UX Designer / Content Developer</span>
+                <span class="developer-link">View profile ↗</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-actions">
+          <button class="outline-dark" id="adminBtn" type="button">Open Admin Dashboard</button>
+        </div>
+      </div>
+
+      <dialog id="developerProfile" aria-labelledby="developerProfileName">
+        <h3 id="developerProfileName"></h3>
+        <p class="profile-role" id="developerProfileRole"></p>
+        <p class="profile-bio" id="developerProfileBio"></p>
+        <button class="profile-close" type="button">Close</button>
+      </dialog>
+    </section>
+
+    <!-- ADMIN DASHBOARD -->
+    <section id="admin" class="section admin-section hidden">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <label>DEMO ADMIN</label>
+            <h2>Barangay Dashboard</h2>
+            <p>
+              Manage project progress and review submitted concerns/requests.
+            </p>
+          </div>
+
+          <button class="link-btn" id="closeAdmin">Close</button>
+        </div>
+
+        <div id="adminSummary" class="admin-stats"></div>
+
+        <div class="admin-grid">
+          <div class="admin-card">
+            <h3>Projects</h3>
+            <div id="adminProjects"></div>
+
+            <form id="projectForm" class="mini-form">
+              <input name="name" placeholder="Project name" required>
+              <input name="location" placeholder="Location" required>
+
+              <select name="status">
+                <option>Planning</option>
+                <option>Ongoing</option>
+                <option>In Progress</option>
+                <option>Completed</option>
+                <option>Delayed</option>
+              </select>
+
+              <input
+                name="progress"
+                type="number"
+                min="0"
+                max="100"
+                placeholder="Progress %"
+              >
+
+              <input name="start" placeholder="Start date">
+              <input name="target" placeholder="Target completion">
+
+              <button class="blue-btn">Add Project</button>
+            </form>
+          </div>
+
+          <div class="admin-card">
+            <h3>Complaints</h3>
+            <div id="adminComplaints"></div>
+          </div>
+
+          <div class="admin-card">
+            <h3>Service Requests</h3>
+            <div id="adminRequests"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a class="footer-logo" href="#home" aria-label="Bantay AgapAI home">
+            <span class="footer-logo-mark">
+              <img src="/bantay-logo.png" alt="">
+            </span>
+            <span class="footer-wordmark">BANTAY <strong>AGAPAI</strong></span>
+          </a>
+
+          <p>
+            Transparent projects. Accessible services. A stronger community.
+          </p>
+
+          <div class="footer-location">
+            <span aria-hidden="true">📍</span>
+            <span>Barangay 135 · Balut, Tondo, Manila</span>
+          </div>
+        </div>
+
+        <nav class="footer-links" aria-label="Explore the website">
+          <h2>Explore</h2>
+          <a href="#services">Barangay Services</a>
+          <a href="#projects">Community Projects</a>
+          <a href="#faqs">Frequently Asked Questions</a>
+          <a href="#about">About Bantay AgapAI</a>
+        </nav>
+
+        <nav class="footer-links" aria-label="Resident tools">
+          <h2>Resident Tools</h2>
+          <a href="#guide">Barangay Guide</a>
+          <a href="#complaints">Submit a Complaint</a>
+          <a href="#track">Track a Request</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Bantay AgapAI. All rights reserved.</span>
+        <a class="footer-back-top" href="#home">
+          Back to top <span aria-hidden="true">↑</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <button class="modal-close" id="closeModal">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Developer profile cards -->
+  <script>
+    (() => {
+      const dialog = document.getElementById("developerProfile");
+      if (!dialog) return;
+
+      const name = document.getElementById("developerProfileName");
+      const role = document.getElementById("developerProfileRole");
+      const bio = document.getElementById("developerProfileBio");
+
+      document.querySelectorAll("#about .developer-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          name.textContent = card.dataset.name;
+          role.textContent = card.dataset.role;
+          bio.textContent = card.dataset.bio;
+          dialog.showModal();
+        });
+      });
+
+      dialog.querySelector(".profile-close").addEventListener("click", () => dialog.close());
+
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) dialog.close();
+      });
+    })();
+  </script>
+
+  <!-- EXISTING APPLICATION SCRIPT -->
+  <script src="/app.js"></script>
+
+  <!-- SERVICE IMAGE REPLACEMENT -->
+  <script>
+    const serviceImages = [
+      {
+        file: "/clearance.png",
+        alt: "Barangay Clearance"
+      },
+      {
+        file: "/concern.png",
+        alt: "Barangay Concern"
+      },
+      {
+        file: "/assistance.png",
+        alt: "Assistance Program"
+      },
+      {
+        file: "/emergency.png",
+        alt: "Emergency Assistance"
+      },
+      {
+        file: "/business.png",
+        alt: "Business Permits"
+      },
+      {
+        file: "/health.png",
+        alt: "Health Services"
+      }
+    ];
+
+    function replaceServiceIcons() {
+      const icons = document.querySelectorAll(
+        "#serviceGrid .service-card .service-icon"
+      );
+
+      icons.forEach((icon, index) => {
+        const item = serviceImages[index];
+
+        if (!item) return;
+
+        // Avoid replacing the same image repeatedly.
+        if (icon.dataset.imageApplied === "true") return;
+
+        const image = document.createElement("img");
+        image.src = item.file;
+        image.alt = item.alt;
+        image.width = 34;
+        image.height = 34;
+        image.style.width = "34px";
+        image.style.height = "34px";
+        image.style.maxWidth = "34px";
+        image.style.maxHeight = "34px";
+        image.style.objectFit = "contain";
+
+        icon.replaceChildren(image);
+        icon.dataset.imageApplied = "true";
+      });
+    }
+
+    // Apply after the page loads.
+    document.addEventListener("DOMContentLoaded", replaceServiceIcons);
+
+    // Watch for service cards created dynamically by app.js.
+    const serviceGrid = document.getElementById("serviceGrid");
+
+    if (serviceGrid) {
+      const serviceObserver = new MutationObserver(() => {
+        replaceServiceIcons();
+      });
+
+      serviceObserver.observe(serviceGrid, {
+        childList: true,
+        subtree: true
+      });
+    }
+
+    // Run once immediately in case app.js already rendered the cards.
+    replaceServiceIcons();
+  </script>
+
+  <!-- FAQ accordion animation -->
+  <script>
+    const faqReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const faqAnimationDuration = faqReducedMotion ? 0 : 260;
+    const faqAnimationEasing = "cubic-bezier(.4, 0, .2, 1)";
+
+    document.querySelectorAll("#faqs .faq-item").forEach((item) => {
+      const summary = item.querySelector("summary");
+
+      summary.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        if (item.dataset.animating === "true") return;
+        item.dataset.animating = "true";
+
+        if (!item.open) {
+          const startHeight = item.getBoundingClientRect().height;
+          item.open = true;
+          const endHeight = item.getBoundingClientRect().height;
+
+          const animation = item.animate(
+            [
+              { height: startHeight + "px" },
+              { height: endHeight + "px" }
+            ],
+            {
+              duration: faqAnimationDuration,
+              easing: faqAnimationEasing
+            }
+          );
+
+          animation.onfinish = () => {
+            item.dataset.animating = "false";
+          };
+          animation.oncancel = () => {
+            item.dataset.animating = "false";
+          };
+        } else {
+          const startHeight = item.getBoundingClientRect().height;
+          const summaryHeight = summary.getBoundingClientRect().height;
+          const itemStyle = window.getComputedStyle(item);
+          const endHeight =
+            summaryHeight +
+            parseFloat(itemStyle.borderTopWidth) +
+            parseFloat(itemStyle.borderBottomWidth);
+
+          const animation = item.animate(
+            [
+              { height: startHeight + "px" },
+              { height: endHeight + "px" }
+            ],
+            {
+              duration: faqAnimationDuration,
+              easing: faqAnimationEasing
+            }
+          );
+
+          animation.onfinish = () => {
+            item.open = false;
+            item.dataset.animating = "false";
+          };
+          animation.oncancel = () => {
+            item.dataset.animating = "false";
+          };
+        }
+      });
+    });
+  </script>
+
+  <script>
+    (() => {
+      const welcomeOverlay = document.getElementById("welcomeOverlay");
+      const welcomePanel = welcomeOverlay.querySelector(".welcome-panel");
+      const closeButton = welcomeOverlay.querySelector(".welcome-close");
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      document.body.classList.add("welcome-open");
+      welcomeOverlay.querySelector(".welcome-close").focus();
+
+      const closeWelcome = () => {
+        if (welcomeOverlay.classList.contains("is-closing")) return;
+        welcomeOverlay.classList.add("is-closing");
+        document.body.classList.remove("welcome-open");
+
+        window.setTimeout(() => {
+          welcomeOverlay.hidden = true;
+          welcomeOverlay.classList.remove("is-closing");
+          window.dispatchEvent(new Event("welcomeOverlayClosed"));
+        }, reducedMotion ? 0 : 230);
+      };
+
+      closeButton.addEventListener("click", closeWelcome);
+
+      welcomePanel.addEventListener("wheel", (event) => {
+        if (welcomePanel.scrollHeight <= welcomePanel.clientHeight) return;
+        event.stopPropagation();
+      }, { passive: true });
+    })();
+  </script>
+
+  <!-- Scroll reveal animations for the top area and page sections -->
+  <script>
+    (() => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const content = document.body;
+
+      if (!content || reducedMotion) return;
+
+      const revealSelector = [
+        ".nav",
+        ".hero-content > *",
+        "#heroStats",
+        ".section-head",
+        ".service-card",
+        ".project-card",
+        ".project-promo",
+        ".guide-shell",
+        ".form-card",
+        ".track-form",
+        ".faq-intro",
+        ".faq-item",
+        ".official-links",
+        ".did-you-know",
+        ".developer-heading-wrap",
+        ".developer-card",
+        ".about-section .container > *",
+        ".admin-card"
+      ].join(",");
+
+      const revealElements = new Set();
+      let lastScrollY = window.scrollY;
+      let scrollDirection = "down";
+      let updatePending = false;
+
+      const updateReveals = () => {
+        const revealLine = window.innerHeight * 0.9;
+
+        revealElements.forEach((element) => {
+          if (!element.isConnected) {
+            revealElements.delete(element);
+            return;
+          }
+
+          const rect = element.getBoundingClientRect();
+          const isInRevealZone = rect.top < revealLine && rect.bottom > 0;
+
+          if (isInRevealZone) {
+            element.classList.add("is-visible");
+          } else if (scrollDirection === "up" && rect.top >= window.innerHeight) {
+            // Reset only content that moves below the screen while scrolling up.
+            element.classList.remove("is-visible");
+          }
+        });
+
+        updatePending = false;
+      };
+
+      const scheduleRevealUpdate = () => {
+        if (updatePending) return;
+        updatePending = true;
+        window.requestAnimationFrame(updateReveals);
+      };
+
+      window.addEventListener("scroll", () => {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY < lastScrollY) {
+          scrollDirection = "up";
+        } else if (currentScrollY > lastScrollY) {
+          scrollDirection = "down";
+        }
+
+        lastScrollY = currentScrollY;
+        scheduleRevealUpdate();
+      }, { passive: true });
+
+      const revealItems = (root) => {
+        const elements = [];
+
+        if (root.matches?.(revealSelector)) {
+          elements.push(root);
+        }
+
+        elements.push(...root.querySelectorAll(revealSelector));
+
+        elements.forEach((element) => {
+          if (element.dataset.scrollRevealReady === "true") return;
+
+          element.dataset.scrollRevealReady = "true";
+          element.classList.add("scroll-reveal");
+          revealElements.add(element);
+        });
+
+        scheduleRevealUpdate();
+      };
+
+      const startReveal = () => {
+        revealItems(content);
+
+        const contentObserver = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                revealItems(node);
+              }
+            });
+          });
+        });
+
+        contentObserver.observe(content, {
+          childList: true,
+          subtree: true
+        });
+
+        window.addEventListener("resize", scheduleRevealUpdate, { passive: true });
+      };
+
+      const welcomeOverlay = document.getElementById("welcomeOverlay");
+
+      if (welcomeOverlay && !welcomeOverlay.hidden) {
+        window.addEventListener("welcomeOverlayClosed", startReveal, { once: true });
+      } else {
+        startReveal();
+      }
+    })();
+  </script>
+</body>
+</html>

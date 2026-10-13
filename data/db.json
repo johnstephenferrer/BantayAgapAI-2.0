@@ -1,0 +1,199 @@
+{
+  "barangay": {
+    "name": "Barangay 135",
+    "area": "Balut, Tondo, Manila",
+    "projectName": "Bantay AgapAI"
+  },
+  "services": [
+    {
+      "id": "clearance",
+      "name": "Barangay Clearance",
+      "category": "Documents",
+      "office": "Barangay Secretary",
+      "schedule": "Monday–Friday, 8:00 AM–5:00 PM",
+      "location": "Barangay Hall, Barangay 135, Balut, Tondo, Manila",
+      "requirements": [
+        "Valid ID, if required",
+        "Completed request form",
+        "Other purpose-specific requirements"
+      ],
+      "steps": [
+        "Proceed to the Barangay Hall",
+        "State the purpose of the clearance",
+        "Complete the form",
+        "Submit requirements and pay any applicable official fee",
+        "Claim according to the release schedule"
+      ]
+    },
+    {
+      "id": "complaint",
+      "name": "Barangay Complaint / Concern",
+      "category": "Complaints",
+      "office": "Barangay Office / Authorized Receiving Desk",
+      "schedule": "Check the current barangay office schedule",
+      "location": "Barangay Hall, Barangay 135, Balut, Tondo, Manila",
+      "requirements": [
+        "Valid ID, if required",
+        "Clear description of the concern",
+        "Supporting photos/documents, if available"
+      ],
+      "steps": [
+        "Prepare a clear description",
+        "Proceed to the receiving desk",
+        "Submit the complaint and supporting information",
+        "Ask for a reference number if available",
+        "Follow the instructions for mediation, investigation, or referral"
+      ]
+    },
+    {
+      "id": "assistance",
+      "name": "Assistance Program Inquiry",
+      "category": "Assistance",
+      "office": "Barangay Assistance / Social Services Desk",
+      "schedule": "Check the current application schedule",
+      "location": "Barangay Hall, Barangay 135, Balut, Tondo, Manila",
+      "requirements": [
+        "Valid ID, if required",
+        "Proof of residency, if required",
+        "Documents supporting the request",
+        "Program-specific requirements"
+      ],
+      "steps": [
+        "Describe the assistance needed",
+        "Ask about current eligibility",
+        "Prepare the documents",
+        "Submit the application",
+        "Wait for assessment and instructions"
+      ]
+    },
+    {
+      "id": "emergency",
+      "name": "Emergency Assistance",
+      "category": "Emergency",
+      "office": "Appropriate emergency responder / hotline",
+      "schedule": "Emergency response availability depends on the service",
+      "location": "Give responders your exact safe location",
+      "requirements": [
+        "Your location",
+        "Type of emergency",
+        "Number of people affected",
+        "Other details requested by responders"
+      ],
+      "steps": [
+        "If there is immediate danger, contact the appropriate emergency service",
+        "Move to a safe location if possible",
+        "Give responders your exact location",
+        "Follow responder instructions",
+        "Contact the barangay for follow-up when appropriate"
+      ]
+    },
+    {
+      "id": "business",
+      "name": "Business Permits",
+      "category": "Business",
+      "office": "Barangay Business Desk",
+      "schedule": "Check the current barangay schedule",
+      "location": "Barangay Hall, Barangay 135, Balut, Tondo, Manila",
+      "requirements": [
+        "Valid ID, if required",
+        "Business documents",
+        "Other permit-specific requirements"
+      ],
+      "steps": [
+        "Ask for the current permit checklist",
+        "Prepare the required documents",
+        "Submit for review",
+        "Follow the instructions for assessment and release"
+      ]
+    },
+    {
+      "id": "health",
+      "name": "Health Services",
+      "category": "Health",
+      "office": "Barangay Health Services",
+      "schedule": "Check the current health service schedule",
+      "location": "Barangay Health Facility / Barangay Hall, as applicable",
+      "requirements": [
+        "Valid ID, if required",
+        "Health or program documents, if applicable"
+      ],
+      "steps": [
+        "Ask about the available health service",
+        "Confirm eligibility and schedule",
+        "Bring the requested documents",
+        "Follow the health worker's instructions"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "p1",
+      "name": "Road Rehabilitation Project",
+      "location": "Purok 1, Barangay 135",
+      "status": "Planning",
+      "progress": 0,
+      "start": "June 10, 2026",
+      "target": "October 15, 2026",
+      "description": "Road rehabilitation and related improvements."
+    },
+    {
+      "id": "p2",
+      "name": "Covered Court Construction",
+      "location": "Purok 3, Barangay 135",
+      "status": "Ongoing",
+      "progress": 50,
+      "start": "August 1, 2026",
+      "target": "December 30, 2026",
+      "description": "Construction of a community covered court."
+    },
+    {
+      "id": "p3",
+      "name": "Drainage System Improvement",
+      "location": "Purok 5, Barangay 135",
+      "status": "In Progress",
+      "progress": 75,
+      "start": "July 5, 2026",
+      "target": "November 20, 2026",
+      "description": "Drainage improvement works."
+    },
+    {
+      "id": "p4",
+      "name": "Street Lighting Installation",
+      "location": "Various Puroks, Barangay 135",
+      "status": "Completed",
+      "progress": 100,
+      "start": "September 1, 2026",
+      "target": "January 30, 2027",
+      "description": "Planned street lighting installation."
+    }
+  ],
+  "complaints": [
+    {
+      "id": "CMP_mulf6heb_6826c4",
+      "name": "Sofia Cagunot",
+      "contact": "",
+      "category": "Environment",
+      "description": "We need a help here the trash are everywhere. Thank you!",
+      "status": "Submitted",
+      "createdAt": "2026-09-28T15:46:06.611Z"
+    }
+  ],
+  "requests": [],
+  "users": [
+    {
+      "id": "USR_mujqbkmb_139b2c",
+      "name": "Barangay Staff",
+      "email": "admin@barangay135.com",
+      "role": "staff",
+      "salt": "b3ca74d1232cf69ddaeff9b44ccfaed7",
+      "passwordHash": "a99c82a5b9c4bc27d71bcf28ea0c24ff229e50c6fc2cf64fb398c2f22cee6b41f716fd2cd3cf9ecc99213ae13a5fc347f8909ccb745474e4388c5b8f2c7dbdb2",
+      "createdAt": "2026-09-27T11:22:27.491Z"
+    }
+  ],
+  "snapshot": {
+    "population": 15000,
+    "services": 30,
+    "ongoingProjects": 8,
+    "satisfaction": 95
+  }
+}
