@@ -948,6 +948,16 @@
     /* Community announcement board and robot entry point */
     body.community-board-open {
       overflow: hidden;
+      margin: 0 !important;
+      padding: 0 !important;
+      transform: none !important;
+    }
+
+    html.community-board-open,
+    html.community-board-open body {
+      margin: 0 !important;
+      padding: 0 !important;
+      transform: none !important;
     }
 
     .community-robot-dock {
@@ -1090,6 +1100,7 @@
     }
 
     .community-board-page {
+      --community-board-sticky-height: 188px;
       position: fixed;
       z-index: 3000;
       inset: 0;
@@ -1114,6 +1125,17 @@
       animation: communityBoardIn 240ms ease both;
     }
 
+    #communityBoardPage {
+      position: fixed !important;
+      inset: 0 !important;
+      top: -22px !important;
+      height: calc(100% + 22px) !important;
+      margin: 0 !important;
+      padding-top: 0 !important;
+      border: 0 !important;
+      outline: 0 !important;
+      transform: none !important;
+    }
     .community-board-page,
     #announcementFormDialog,
     #announcementFormDialog * {
@@ -1137,12 +1159,82 @@
       pointer-events: none;
     }
 
+    @property --community-board-sticky-height {
+      syntax: '<length>';
+      inherits: true;
+      initial-value: 188px;
+    }
+
+    .community-board-page {
+      transition: --community-board-sticky-height 280ms ease;
+    }
+
+    .community-board-page.is-scrolled {
+      --community-board-sticky-height: 104px;
+    }
+
+    .community-board-sticky-shell {
+      position: sticky;
+      top: 22px;
+      z-index: 20;
+      isolation: isolate;
+      flex: 0 0 auto;
+      background: transparent;
+    }
+
+    .community-board-sticky-shell::before {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      content: "";
+      background: rgba(0, 0, 0, .76);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 420ms ease;
+    }
+
+    .community-board-sticky-shell.is-scrolled::before {
+      opacity: 1;
+    }
+
     .community-board-header {
       position: relative;
       z-index: 1;
       background: transparent;
       color: #fff;
       box-shadow: none;
+    }
+
+    .community-board-sticky-shell.is-scrolled .community-board-header-inner {
+      min-height: 76px;
+    }
+
+    .community-board-sticky-shell.is-scrolled .community-board-brand {
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .community-board-sticky-shell.is-scrolled .community-board-brand img {
+      width: 58px;
+      height: 58px;
+    }
+
+    .community-board-sticky-shell.is-scrolled .community-board-search-wrap,
+    .community-board-sticky-shell.is-scrolled .community-board-back {
+      min-height: 34px;
+    }
+
+    .community-board-sticky-shell.is-scrolled .community-board-nav {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+
+    .community-board-sticky-shell.is-scrolled .community-board-nav a {
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+    .community-board-sticky-shell .community-board-header-inner {
+      transition: min-height 280ms cubic-bezier(.22, 1, .36, 1);
     }
 
     .community-board-header-inner {
@@ -1162,6 +1254,11 @@
       align-items: center;
       gap: 9px;
       margin-left: auto;
+    }
+
+    .community-board-sticky-shell .community-board-search-wrap,
+    .community-board-sticky-shell .community-board-back {
+      transition: min-height 280ms ease;
     }
 
     .community-board-search-wrap {
@@ -1221,6 +1318,10 @@
       text-decoration: none;
     }
 
+    .community-board-sticky-shell .community-board-brand img {
+      transition: width 280ms cubic-bezier(.22, 1, .36, 1), height 280ms cubic-bezier(.22, 1, .36, 1);
+    }
+
     .community-board-brand img {
       width: 120px;
       height: 120px;
@@ -1261,13 +1362,19 @@
       transform: translateY(0) scale(.97);
     }
 
+    .community-board-sticky-shell .community-board-nav {
+      transition: padding 280ms ease;
+    }
+
     .community-board-nav {
+      position: relative;
+      z-index: 1;
       display: flex;
       width: min(1400px, calc(100% - 64px));
       align-items: center;
       justify-content: center;
       gap: clamp(16px, 2.5vw, 38px);
-      margin: 0 auto 10px;
+      margin: 0 auto;
       padding: 11px 0 8px;
       border-top: 1px solid rgba(255, 255, 255, .2);
       overflow-x: auto;
@@ -1301,8 +1408,9 @@
       display: flex;
       flex-direction: column;
       min-height: min(540px, 72vh);
-      padding: 0 0 clamp(26px, 3.5vw, 40px);
-      background: url("/city.jpg") center 42% / cover no-repeat;
+      margin-top: calc(-1 * var(--community-board-sticky-height, 188px));
+      padding: var(--community-board-sticky-height, 188px) 0 clamp(26px, 3.5vw, 40px);
+      background: url("/city.png") center 42% / cover no-repeat;
       color: #fff;
     }
 
@@ -1312,6 +1420,7 @@
       inset: 0;
       content: "";
       background:
+        linear-gradient(180deg, rgba(5, 17, 43, .96) 0%, rgba(5, 17, 43, .58) 18%, transparent 42%),
         linear-gradient(90deg, rgba(5, 17, 43, .92) 0%, rgba(8, 36, 95, .76) 42%, rgba(8, 36, 95, .18) 100%),
         linear-gradient(0deg, rgba(5, 17, 43, .55), rgba(5, 17, 43, .08) 58%);
       pointer-events: none;
@@ -2113,13 +2222,13 @@
     }
 
     @keyframes communityBoardIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes communityBoardOut {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(7px); }
+      from { opacity: 1; }
+      to { opacity: 0; }
     }
 
     @media (max-width: 720px) {
@@ -2138,6 +2247,10 @@
         width: min(calc(100% - 24px), 1120px);
         padding: 0;
         grid-template-columns: 1fr;
+      }
+
+      .community-board-page {
+        --community-board-sticky-height: 144px;
       }
 
       .community-board-hero {
@@ -2224,9 +2337,13 @@
         transform: translateX(-50%);
       }
 
+      .community-board-page {
+        --community-board-sticky-height: 144px;
+      }
+
       .community-board-hero {
         min-height: 370px;
-        padding: 0 0 24px;
+        padding: var(--community-board-sticky-height, 144px) 0 24px;
       }
 
       .community-board-filters {
@@ -2260,6 +2377,35 @@
 
       .community-robot-dock.is-collapsed {
         transform: translateX(calc(-100% + 38px));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .community-board-page.is-scrolled {
+        --community-board-sticky-height: 100px;
+      }
+
+      .community-board-sticky-shell.is-scrolled .community-board-header-inner {
+        min-height: 74px;
+      }
+
+      .community-board-sticky-shell.is-scrolled .community-board-brand {
+        top: 2px;
+        transform: translateX(-50%);
+      }
+
+      .community-board-sticky-shell.is-scrolled .community-board-brand img {
+        width: 32px;
+        height: 32px;
+      }
+
+      .community-board-sticky-shell.is-scrolled .community-board-header-actions {
+        bottom: 4px;
+      }
+
+      .community-board-sticky-shell.is-scrolled .community-board-search-wrap,
+      .community-board-sticky-shell.is-scrolled .community-board-back {
+        min-height: 30px;
       }
     }
 
@@ -3148,7 +3294,7 @@
     aria-labelledby="communityBoardTitle"
     hidden
   >
-    <div class="community-board-hero">
+    <div class="community-board-sticky-shell">
       <header class="community-board-header">
         <div class="community-board-header-inner">
           <a class="community-board-brand" id="communityBoardHome" href="#home" aria-label="Bantay AgapAI home">
@@ -3177,6 +3323,8 @@
         <a href="#guide-board-rules">Community Rules</a>
         <a href="https://ehotlines.e.gov.ph/" target="_blank" rel="noopener noreferrer">Emergency Help</a>
       </nav>
+      </div>
+    <div class="community-board-hero">
       <div class="community-board-hero-inner">
         <div class="community-board-intro">
           <p class="community-board-kicker">Community Updates</p>
@@ -3555,6 +3703,8 @@
   <script>
     (() => {
       const board = document.getElementById("communityBoardPage");
+      const stickyShell = board?.querySelector(".community-board-sticky-shell");
+      const boardHero = board?.querySelector(".community-board-hero");
       const openButton = document.getElementById("communityRobotOpen");
       const dock = document.getElementById("communityRobotDock");
       const toggleButton = document.getElementById("communityRobotToggle");
@@ -3568,6 +3718,20 @@
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const boardRoute = "#community-board";
       const robotDockPreferenceKey = "bantayAgapAI.communityBoardShortcutHidden";
+
+      const syncStickyHeader = () => {
+        if (!stickyShell || !boardHero) return;
+        const expandedHeight = window.matchMedia("(max-width: 720px)").matches ? 144 : 188;
+        const isCompact = stickyShell.classList.contains("is-scrolled");
+        const releaseMargin = isCompact ? 18 : 0;
+        const shouldCompact = board.scrollTop > 0 &&
+          boardHero.getBoundingClientRect().bottom <= expandedHeight + releaseMargin;
+        stickyShell.classList.toggle("is-scrolled", shouldCompact);
+        board.classList.toggle("is-scrolled", shouldCompact);
+      };
+
+      board.addEventListener("scroll", syncStickyHeader, { passive: true });
+      window.addEventListener("resize", syncStickyHeader);
 
       const setDockCollapsed = (collapsed) => {
         dock.classList.toggle("is-collapsed", collapsed);
@@ -3597,10 +3761,12 @@
         previousFocus = document.activeElement;
         board.classList.remove("is-closing");
         board.hidden = false;
+        document.documentElement.classList.add("community-board-open");
         document.body.classList.add("community-board-open");
         updateBoardRoute("community-board");
         closeButton.focus({ preventScroll: true });
         board.scrollTop = 0;
+        syncStickyHeader();
       };
 
       const closeBoard = (goHome = false) => {
@@ -3611,6 +3777,7 @@
         window.setTimeout(() => {
           board.hidden = true;
           board.classList.remove("is-closing");
+          document.documentElement.classList.remove("community-board-open");
           document.body.classList.remove("community-board-open");
           boardClosing = false;
           if (window.location.hash === boardRoute) {
