@@ -2451,6 +2451,18 @@
         transform: none !important;
       }
     }
+
+    /* Keep service detail modals scrollable without a visible scrollbar. */
+    #modal .modal-card {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    #modal .modal-card::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
   </style>
 </head>
 
@@ -3471,6 +3483,7 @@
           bio.textContent = card.dataset.bio;
           quote.textContent = `“${card.dataset.quote}”`;
           dialog.showModal();
+          dialog.scrollTop = 0;
         });
       });
 
@@ -3785,7 +3798,9 @@
           }
 
           if (goHome) {
-            window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            window.scrollTo({ top: 0, left: 0, behavior: reducedMotion ? "auto" : "smooth" });
           } else if (previousFocus && previousFocus.isConnected) {
             previousFocus.focus({ preventScroll: true });
           }
@@ -3827,6 +3842,15 @@
       if (window.location.hash === boardRoute) {
         openBoard();
       }
+
+      // Start the dashboard at its top instead of restoring a previous bottom scroll position.
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      window.addEventListener("pageshow", () => {
+        if (!board.hidden) return;
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      });
     })();
   </script>
 
