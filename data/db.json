@@ -185,8 +185,8 @@
       "name": "Barangay Staff",
       "email": "admin@barangay135.com",
       "role": "staff",
-      "salt": "b3ca74d1232cf69ddaeff9b44ccfaed7",
-      "passwordHash": "a99c82a5b9c4bc27d71bcf28ea0c24ff229e50c6fc2cf64fb398c2f22cee6b41f716fd2cd3cf9ecc99213ae13a5fc347f8909ccb745474e4388c5b8f2c7dbdb2",
+      "salt": "6ab5b959f83e3c27d905651c606ea79c",
+      "passwordHash": "5d8a46ac65266c2fcc6a664c3df6b03546794fa886051c3086ad81d79aa2ab8fb0699ac88d7225a110abf26fc4826853999ecfd04375537da283da61fa7c9c3e",
       "createdAt": "2026-09-27T11:22:27.491Z"
     }
   ],
@@ -195,5 +195,36 @@
     "services": 30,
     "ongoingProjects": 8,
     "satisfaction": 95
-  }
+  },
+  "announcements": [
+    {
+      "id": "ANN_mv8kegcc_d7de7b",
+      "type": "missing-pet",
+      "title": "Missing Dog",
+      "location": "173 Buendia St. Tondo Manila",
+      "date": "2026-10-14",
+      "description": "A resident is looking for his missing brown-and-white dog. The dog has a white chest and muzzle, brown ears and back, and a fluffy tail. If you’ve seen him or know where he might be, please contact the barangay office so the resident can be reunited with his dog.",
+      "reporterName": "Admin of Barangay",
+      "contact": "",
+      "status": "Missing",
+      "createdAt": "2026-10-14T20:30:58.620Z",
+      "createdBy": "USR_mujqbkmb_139b2c",
+      "image": "/uploads/announcements/announcement_image_mv8kegck_567c0b.png",
+      "updatedAt": "2026-10-14T20:53:09.889Z"
+    },
+    {
+      "id": "ANN_mv8jx5ad_e68910",
+      "type": "lost-found",
+      "title": "Black Wallet Found",
+      "location": "Patria Street",
+      "date": "2026-10-15",
+      "description": "A black wallet was found along Patria Street at around 1:00 PM. It is currently being kept safe while its owner is being located. If you believe it belongs to you, please contact the barangay office and provide a description of the wallet and its contents to help verify your claim.",
+      "reporterName": "Admin of Barangay",
+      "contact": "",
+      "status": "Missing",
+      "createdAt": "2026-10-14T20:17:31.141Z",
+      "createdBy": "USR_mujqbkmb_139b2c",
+      "image": "/uploads/announcements/announcement_image_mv8jx5b8_a8c9a2.png"
+    }
+  ]
 }

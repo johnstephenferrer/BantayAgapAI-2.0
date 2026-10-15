@@ -73,6 +73,94 @@
       padding: 4px 0;
     }
 
+    #complaints .complaint-photo-field {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+      font-weight: 700;
+    }
+
+    #complaints .complaint-photo-field input {
+      width: 100%;
+      min-height: 48px;
+      padding: 7px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--muted, #6075a0);
+      font: 12px Inter, sans-serif;
+      cursor: pointer;
+    }
+
+    #complaints .complaint-photo-field input::file-selector-button {
+      margin-right: 12px;
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--navy, #08245f);
+      color: #fff;
+      font: 700 12px Inter, sans-serif;
+      cursor: pointer;
+      transition: background-color 180ms ease, transform 180ms ease;
+    }
+
+    #complaints .complaint-photo-field input::file-selector-button:hover {
+      background: var(--deep-blue, #1850d9);
+    }
+
+    #complaints .complaint-photo-field input::-webkit-file-upload-button {
+      margin-right: 12px;
+      padding: 9px 14px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--navy, #08245f);
+      color: #fff;
+      font: 700 12px Inter, sans-serif;
+      cursor: pointer;
+    }
+
+    #complaints .complaint-photo-selection {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted, #6075a0);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    #complaints #complaintPhotoRemove {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--navy, #08245f);
+      font: 700 11px Inter, sans-serif;
+      cursor: pointer;
+    }
+
+    #complaints #complaintPhotoRemove:hover {
+      border-color: var(--primary-blue, #1c71ea);
+      color: var(--deep-blue, #1850d9);
+    }
+
+    #complaints .complaint-photo-field small {
+      color: var(--muted, #6075a0);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    #complaints #complaintPhotoPreview {
+      max-width: 100%;
+      max-height: 240px;
+      justify-self: start;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #f4f7fc;
+    }
+
     #heroStats .stat-icon {
       width: 30px;
       height: 30px;
@@ -337,13 +425,22 @@
       text-align: left;
       font: inherit;
       cursor: pointer;
-      transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      transition: transform 200ms cubic-bezier(.2,.75,.25,1), box-shadow 200ms ease, border-color 200ms ease;
     }
 
     #about .developer-card:hover {
       transform: translateY(-4px);
       border-color: var(--primary-blue, #1C71EA);
       box-shadow: 0 12px 26px rgba(16, 42, 104, .12);
+    }
+
+    #about .developer-card:active {
+      transform: translateY(-1px) scale(.985);
+    }
+
+    #about .developer-card:focus-visible {
+      outline: 3px solid rgba(28, 113, 234, .55);
+      outline-offset: 3px;
     }
 
     #about .developer-card img {
@@ -383,7 +480,11 @@
     }
 
     #developerProfile {
-      width: min(440px, calc(100% - 32px));
+      width: min(560px, calc(100% - 32px));
+      max-height: min(84vh, 760px);
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
       padding: 28px;
       border: 1px solid var(--line, #dce9fa);
       border-top: 4px solid var(--gold, #E8C95A);
@@ -393,13 +494,32 @@
       box-shadow: 0 24px 70px rgba(8, 36, 95, .28);
     }
 
+    #developerProfile::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
     #developerProfile::backdrop {
       background: rgba(8, 36, 95, .62);
       backdrop-filter: blur(3px);
     }
 
     #developerProfile[open] {
-      animation: developerProfileIn 220ms ease both;
+      animation: developerProfileIn 280ms cubic-bezier(.2,.75,.25,1) both;
+    }
+
+    #developerProfile.is-closing {
+      animation: developerProfileOut 190ms cubic-bezier(.4,0,.7,.2) both;
+      pointer-events: none;
+    }
+
+    #developerProfile::backdrop {
+      animation: developerBackdropIn 240ms ease both;
+    }
+
+    #developerProfile.is-closing::backdrop {
+      animation: developerBackdropOut 180ms ease both;
     }
 
     #developerProfile h3 {
@@ -416,9 +536,21 @@
     }
 
     #developerProfile .profile-bio {
-      margin: 0 0 20px;
+      margin: 0;
       color: var(--muted, #6075a0);
       line-height: 1.65;
+      white-space: pre-line;
+    }
+
+    #developerProfile .profile-quote {
+      margin: 20px 0;
+      padding: 14px 0 0 14px;
+      border-top: 1px solid var(--line, #dce9fa);
+      border-left: 3px solid var(--gold, #E8C95A);
+      color: var(--navy, #08245f);
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.55;
     }
 
     #developerProfile .profile-close {
@@ -433,8 +565,33 @@
     }
 
     @keyframes developerProfileIn {
-      from { opacity: 0; transform: translateY(10px) scale(.97); }
+      from { opacity: 0; transform: translateY(18px) scale(.965); }
+      70% { opacity: 1; transform: translateY(-2px) scale(1.005); }
       to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes developerProfileOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(10px) scale(.985); }
+    }
+
+    @keyframes developerBackdropIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes developerBackdropOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #about .developer-card,
+      #developerProfile,
+      #developerProfile::backdrop {
+        animation: none !important;
+        transition: none !important;
+      }
     }
 
     @media (max-width: 760px) {
@@ -787,6 +944,1367 @@
         will-change: auto;
       }
     }
+
+    /* Community announcement board and robot entry point */
+    body.community-board-open {
+      overflow: hidden;
+    }
+
+    .community-robot-dock {
+      position: absolute;
+      z-index: 1200;
+      left: 0;
+      top: calc(48vh - 118px);
+      width: 240px;
+      height: 236px;
+      transform: none;
+      transition: transform 360ms cubic-bezier(.2, .8, .2, 1);
+      pointer-events: none;
+    }
+
+    .community-robot-dock.is-collapsed {
+      transform: translateX(calc(-100% + 38px));
+    }
+
+    .community-robot-dock.is-collapsed .community-robot-label {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .community-robot-launcher {
+      position: absolute;
+      left: -42px;
+      bottom: 0;
+      width: 220px;
+      height: 220px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      pointer-events: auto;
+      filter: drop-shadow(0 12px 18px rgba(8, 36, 95, .22));
+      transition: transform 220ms ease, filter 220ms ease;
+    }
+
+    .community-robot-launcher:hover,
+    .community-robot-launcher:focus-visible {
+      transform: translateX(7px) scale(1.035);
+      filter: drop-shadow(0 15px 22px rgba(8, 36, 95, .3));
+    }
+
+    .community-robot-launcher:active {
+      transform: translateX(3px) scale(.96);
+    }
+
+    .community-robot-launcher.is-activating {
+      animation: robotBoardLaunch 320ms cubic-bezier(.2, .8, .2, 1);
+    }
+
+    @keyframes robotBoardLaunch {
+      45% { transform: translateX(9px) scale(1.08); }
+      100% { transform: translateX(0) scale(1); }
+    }
+
+    .community-robot-launcher:focus-visible,
+    .community-robot-toggle:focus-visible,
+    .community-board-page button:focus-visible,
+    .community-board-page input:focus-visible,
+    .community-board-page select:focus-visible {
+      outline: 3px solid #1c71ea;
+      outline-offset: 3px;
+    }
+
+    .community-robot-launcher img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: transparent;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .community-robot-label {
+      position: absolute;
+      top: 14px;
+      left: 186px;
+      max-width: 128px;
+      padding: 7px 11px;
+      border: 1px solid rgba(232, 201, 90, .78);
+      border-radius: 999px;
+      background: var(--navy, #08245f);
+      color: #fff;
+      box-shadow: 0 7px 18px rgba(8, 36, 95, .2);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .035em;
+      line-height: 1.2;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .community-robot-label::after {
+      content: "";
+      position: absolute;
+      left: 20px;
+      bottom: -6px;
+      width: 10px;
+      height: 10px;
+      border-right: 1px solid rgba(232, 201, 90, .78);
+      border-bottom: 1px solid rgba(232, 201, 90, .78);
+      background: var(--navy, #08245f);
+      transform: rotate(45deg);
+    }
+
+    .community-robot-toggle {
+      position: absolute;
+      top: 61%;
+      right: 0;
+      width: 38px;
+      height: 48px;
+      padding: 0;
+      border: 1px solid rgba(197, 169, 112, .78);
+      border-left: 0;
+      border-radius: 0 13px 13px 0;
+      background: #1c71ea;
+      color: #fff;
+      box-shadow: 5px 6px 15px rgba(8, 36, 95, .22);
+      font-size: 25px;
+      line-height: 1;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .community-robot-toggle:hover {
+      border-color: #d2bb87;
+      background: #1850d9;
+      box-shadow: 5px 7px 18px rgba(8, 36, 95, .28);
+      transform: translateX(2px);
+    }
+
+    .community-robot-toggle:active {
+      transform: scale(.94);
+    }
+
+    .community-board-page {
+      position: fixed;
+      z-index: 3000;
+      inset: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      scroll-behavior: smooth;
+      --navy: #08245f;
+      --deep-blue: #1850d9;
+      --primary-blue: #1c71ea;
+      --blue: #1b60e1;
+      --pink: #e8c95a;
+      --gold: #e8c95a;
+      --text: #24344d;
+      --muted: #66758d;
+      --line: #dce5f2;
+      --surface: #fff;
+      background: #f4f7fc;
+      color: var(--text);
+      overscroll-behavior: contain;
+      animation: communityBoardIn 240ms ease both;
+    }
+
+    .community-board-page,
+    #announcementFormDialog,
+    #announcementFormDialog * {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    .community-board-page::-webkit-scrollbar,
+    #announcementFormDialog::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .community-board-page[hidden] {
+      display: none !important;
+    }
+
+    .community-board-page.is-closing {
+      animation: communityBoardOut 220ms cubic-bezier(.4, 0, .2, 1) both;
+      pointer-events: none;
+    }
+
+    .community-board-header {
+      position: relative;
+      z-index: 1;
+      background: transparent;
+      color: #fff;
+      box-shadow: none;
+    }
+
+    .community-board-header-inner {
+      position: relative;
+      width: min(1400px, calc(100% - 64px));
+      min-height: 156px;
+      margin: 0 auto;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .community-board-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-left: auto;
+    }
+
+    .community-board-search-wrap {
+      display: flex;
+      width: clamp(150px, 17vw, 215px);
+      min-height: 40px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 11px;
+      border: 1px solid rgba(255, 255, 255, .45);
+      border-radius: 999px;
+      background: rgba(10, 20, 38, .38);
+      color: rgba(255, 255, 255, .86);
+      backdrop-filter: blur(8px);
+      transition: border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .community-board-search-wrap:focus-within {
+      border-color: rgba(255, 255, 255, .45);
+      background: rgba(10, 20, 38, .38);
+      box-shadow: none;
+    }
+
+    .community-board-search-icon {
+      flex: 0 0 auto;
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .community-board-search-wrap .community-board-search {
+      width: 100%;
+      min-width: 0;
+      min-height: 36px;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #fff;
+      box-shadow: none;
+      font-size: 11px;
+    }
+
+    .community-board-search-wrap .community-board-search::placeholder {
+      color: rgba(255, 255, 255, .8);
+    }
+
+    .community-board-brand {
+      position: absolute;
+      top: 58%;
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transform: translate(-50%, -50%);
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .community-board-brand img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .community-board-brand small {
+      display: none;
+    }
+
+    .community-board-back {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255, 255, 255, .62);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .09);
+      color: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .community-board-back:hover {
+      transform: translateY(-1px);
+      border-color: #fff;
+      background: #1850d9;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .16);
+    }
+
+    .community-board-back:active {
+      transform: translateY(0) scale(.97);
+    }
+
+    .community-board-nav {
+      display: flex;
+      width: min(1400px, calc(100% - 64px));
+      align-items: center;
+      justify-content: center;
+      gap: clamp(16px, 2.5vw, 38px);
+      margin: 0 auto 10px;
+      padding: 11px 0 8px;
+      border-top: 1px solid rgba(255, 255, 255, .2);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .community-board-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .community-board-nav a {
+      flex: 0 0 auto;
+      padding: 4px 0;
+      color: rgba(255, 255, 255, .9);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 180ms ease;
+    }
+
+    .community-board-nav a:hover {
+      color: var(--gold);
+    }
+
+    .community-board-hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: min(540px, 72vh);
+      padding: 0 0 clamp(26px, 3.5vw, 40px);
+      background: url("/city.jpg") center 42% / cover no-repeat;
+      color: #fff;
+    }
+
+    .community-board-hero::before {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      content: "";
+      background:
+        linear-gradient(90deg, rgba(5, 17, 43, .92) 0%, rgba(8, 36, 95, .76) 42%, rgba(8, 36, 95, .18) 100%),
+        linear-gradient(0deg, rgba(5, 17, 43, .55), rgba(5, 17, 43, .08) 58%);
+      pointer-events: none;
+    }
+
+    .community-board-hero > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .community-board-hero-inner,
+    .community-board-content {
+      width: min(1400px, calc(100% - 64px));
+      margin: 0 auto;
+    }
+
+    .community-board-hero-inner {
+      width: min(1400px, calc(100% - 64px));
+      margin: 0 auto;
+      padding: 0;
+      text-align: left;
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+      align-items: center;
+      gap: clamp(30px, 5vw, 76px);
+    }
+
+    .community-board-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 12px;
+      padding: 7px 11px;
+      border: 1px solid rgba(232, 201, 90, .68);
+      border-radius: 999px;
+      background: rgba(5, 17, 43, .5);
+      color: var(--gold, #E8C95A);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .community-board-kicker::before {
+      content: "";
+      width: 22px;
+      height: 2px;
+      border-radius: 9px;
+      background: currentColor;
+    }
+
+    .community-board-title {
+      margin: 0;
+      color: #fff;
+      font-family: Poppins, Inter, sans-serif;
+      font-size: clamp(25px, 4vw, 35px);
+      font-weight: 800;
+      letter-spacing: -.025em;
+      text-shadow: 0 4px 18px rgba(0, 0, 0, .22);
+      line-height: 1.15;
+    }
+
+    .community-board-description {
+      max-width: 680px;
+      margin: 9px 0 0;
+      color: #edf4ff;
+      font-size: 13px;
+      line-height: 1.6;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, .18);
+    }
+
+    .community-board-featured {
+      align-self: center;
+      padding: 6px 0;
+      border-top: 1px solid rgba(255, 255, 255, .4);
+      border-bottom: 1px solid rgba(255, 255, 255, .4);
+    }
+
+    .community-board-featured-label {
+      margin: 0;
+      padding: 15px 0 11px;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .community-board-featured-item {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 0;
+      border: 0;
+      border-top: 1px solid rgba(255, 255, 255, .18);
+      background: transparent;
+      color: #fff;
+      text-align: left;
+      font: inherit;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: color 180ms ease, padding 180ms ease;
+    }
+
+    .community-board-featured-item::after {
+      content: "→";
+      color: var(--gold);
+      font-size: 18px;
+      transition: transform 180ms ease;
+    }
+
+    .community-board-featured-item:hover {
+      padding-left: 5px;
+      color: #ffe58a;
+    }
+
+    .community-board-featured-item:hover::after {
+      transform: translateX(3px);
+    }
+
+    .community-board-content {
+      padding: 16px 0 30px;
+    }
+
+    .community-board-guide {
+      margin: 26px 0 4px;
+      scroll-margin-top: 18px;
+    }
+
+    .community-board-guide h2 {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-family: Poppins, Inter, sans-serif;
+      font-size: clamp(18px, 2vw, 23px);
+    }
+
+    .community-board-guide-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .community-board-guide-card {
+      min-height: 128px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+      box-shadow: 0 5px 16px rgba(8, 36, 95, .05);
+    }
+
+    .community-board-guide-card h3 {
+      margin: 0 0 7px;
+      color: var(--navy);
+      font-size: 13px;
+    }
+
+    .community-board-guide-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .community-board-guide-card ol,
+    .community-board-guide-card ul {
+      display: grid;
+      gap: 6px;
+      margin: 9px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .community-board-guide-card {
+      scroll-margin-top: 18px;
+    }
+
+    .community-board-guide-card a {
+      display: inline-block;
+      margin-top: 9px;
+      color: var(--deep-blue);
+      font-size: 11px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .community-board-guide-card a:hover {
+      text-decoration: underline;
+    }
+
+    .community-board-tabs {
+      display: flex;
+      gap: 8px;
+      margin: 0 0 15px;
+      overflow-x: auto;
+      padding: 2px 2px 8px;
+      scrollbar-width: none;
+    }
+
+    .community-board-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .community-board-tab {
+      flex: 0 0 auto;
+      min-height: 38px;
+      padding: 9px 13px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--navy, #08245f);
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(8, 36, 95, .04);
+      transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease, transform 200ms cubic-bezier(.2, .8, .2, 1), box-shadow 200ms ease;
+    }
+
+    .community-board-tab:hover,
+    .community-board-tab[aria-pressed="true"] {
+      border-color: var(--deep-blue, #1850D9);
+      background: linear-gradient(115deg, #08245f, #1c71ea);
+      color: #fff;
+    }
+
+    .community-board-tab:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 16px rgba(8, 36, 95, .14);
+    }
+
+    .community-board-tab:active {
+      transform: translateY(0) scale(.97);
+    }
+
+    .community-board-filters {
+      display: grid;
+      grid-template-columns: minmax(155px, 205px) minmax(145px, 175px);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .community-board-search,
+    .community-board-select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--text, #102a68);
+      font: inherit;
+      font-size: 12px;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease, transform 180ms ease;
+    }
+
+    .community-board-search:hover,
+    .community-board-select:hover {
+      border-color: var(--primary-blue, #1C71EA);
+      box-shadow: 0 4px 12px rgba(8, 36, 95, .08);
+    }
+
+    .community-board-select:active {
+      transform: scale(.99);
+    }
+
+    .community-board-search:focus,
+    .community-board-select:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .community-board-header-actions .community-board-search:focus-visible,
+    .community-board-header-actions .community-board-back:focus-visible {
+      outline: none;
+    }
+
+    .community-board-search {
+      padding: 0 14px;
+    }
+
+    .community-board-search::placeholder {
+      color: var(--muted, #6075a0);
+    }
+
+    .community-board-select {
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .community-sort-native {
+      display: none;
+    }
+
+    .community-sort-picker,
+    .announcement-type-picker {
+      position: relative;
+      width: 100%;
+    }
+
+    .community-sort-trigger,
+    .announcement-type-trigger {
+      display: flex;
+      width: 100%;
+      min-height: 42px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 13px;
+      border: 1px solid var(--line, #dce9fa);
+      border-radius: 10px;
+      color: var(--text, #102a68);
+      background: #fff;
+      font: inherit;
+      font-size: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 170ms ease, box-shadow 170ms ease, background-color 170ms ease, transform 170ms ease;
+    }
+
+    .announcement-type-trigger {
+      min-height: 44px;
+      font-size: 14px;
+    }
+
+    .community-sort-trigger:hover,
+    .announcement-type-trigger:hover {
+      border-color: #9bb9df;
+      background: #fbfdff;
+    }
+
+    .community-sort-trigger:focus-visible,
+    .announcement-type-trigger:focus-visible {
+      outline: none;
+      border-color: #3978c8;
+      box-shadow: 0 0 0 3px rgba(57, 120, 200, .16);
+    }
+
+    .community-sort-trigger[aria-expanded="true"],
+    .announcement-type-trigger[aria-expanded="true"] {
+      border-color: #3978c8;
+      border-radius: 10px 10px 8px 8px;
+      box-shadow: 0 0 0 3px rgba(57, 120, 200, .12);
+    }
+
+    .community-sort-chevron,
+    .announcement-type-chevron {
+      width: 9px;
+      height: 9px;
+      flex: 0 0 9px;
+      border-right: 2px solid #1850d9;
+      border-bottom: 2px solid #1850d9;
+      transform: translateY(-2px) rotate(45deg);
+      transition: transform 180ms ease;
+    }
+
+    .community-sort-trigger[aria-expanded="true"] .community-sort-chevron,
+    .announcement-type-trigger[aria-expanded="true"] .announcement-type-chevron {
+      transform: translateY(2px) rotate(225deg);
+    }
+
+    .community-sort-options,
+    .announcement-type-options {
+      position: absolute;
+      z-index: 30;
+      top: calc(100% + 6px);
+      right: 0;
+      left: 0;
+      display: grid;
+      gap: 3px;
+      padding: 6px;
+      border: 1px solid #dce9fa;
+      border-radius: 11px;
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(8, 36, 95, .17);
+      opacity: 0;
+      transform: translateY(-9px) scale(.985);
+      transform-origin: top center;
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 190ms cubic-bezier(.2,.75,.25,1);
+    }
+
+    .community-sort-options[hidden],
+    .announcement-type-options[hidden] {
+      display: none;
+    }
+
+    .community-sort-options.is-open,
+    .announcement-type-options.is-open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .community-sort-options button,
+    .announcement-type-options button {
+      width: 100%;
+      padding: 10px 11px;
+      border: 0;
+      border-radius: 7px;
+      color: #18385f;
+      background: transparent;
+      font: inherit;
+      font-size: 13px;
+      text-align: left;
+      cursor: pointer;
+      transition: color 140ms ease, background-color 140ms ease, transform 140ms ease;
+    }
+
+    .community-sort-options button:hover,
+    .announcement-type-options button:hover,
+    .community-sort-options button:focus-visible,
+    .announcement-type-options button:focus-visible {
+      outline: none;
+      color: #08245f;
+      background: #edf5ff;
+      transform: translateX(2px);
+    }
+
+    .community-sort-options button[aria-selected="true"],
+    .announcement-type-options button[aria-selected="true"] {
+      color: #123f83;
+      background: #f1f6fd;
+      font-weight: 750;
+    }
+
+    .community-announcement-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .community-announcement-empty {
+      padding: 34px 20px;
+      border: 1px dashed #bdcde5;
+      border-radius: 14px;
+      background: #fff;
+      text-align: center;
+    }
+
+    .community-announcement-empty-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 12px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #e8efec;
+      color: var(--deep-blue);
+      font-size: 22px;
+    }
+
+    .community-announcement-empty h2 {
+      margin: 0 0 6px;
+      color: var(--navy, #08245f);
+      font-size: 17px;
+    }
+
+    .community-announcement-empty p {
+      max-width: 420px;
+      margin: 0 auto;
+      color: var(--muted, #6075a0);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .community-announcement-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 34%);
+      overflow: hidden;
+      border: 1px solid #dce3df;
+      border-left: 4px solid var(--gold, #E8C95A);
+      border-radius: 15px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(8, 36, 95, .07);
+      animation: announcementCardIn 460ms cubic-bezier(.2,.8,.2,1) both;
+      transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .community-announcement-card:hover {
+      transform: translateY(-3px);
+      border-color: #a9c5ed;
+      box-shadow: 0 14px 30px rgba(8, 36, 95, .12);
+    }
+
+    .community-announcement-card:nth-child(2) { animation-delay: 55ms; }
+    .community-announcement-card:nth-child(3) { animation-delay: 110ms; }
+    .community-announcement-card:nth-child(4) { animation-delay: 165ms; }
+
+    @keyframes announcementCardIn {
+      from { opacity: 0; transform: translateY(14px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .community-announcement-copy {
+      min-width: 0;
+      padding: 20px 22px;
+    }
+
+    .community-announcement-image {
+      display: block;
+      width: 100%;
+      min-height: 166px;
+      height: 100%;
+      object-fit: cover;
+      background: #eaf0fa;
+      transition: transform 420ms cubic-bezier(.2,.8,.2,1), filter 300ms ease;
+    }
+
+    .community-announcement-card:hover .community-announcement-image {
+      transform: scale(1.025);
+      filter: saturate(1.06);
+    }
+
+    .community-announcement-status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #e6f8ed;
+      color: #167342;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .community-announcement-status.is-missing {
+      background: #f5e9e3;
+      color: #9c4f43;
+    }
+
+    .community-announcement-copy h2,
+    .community-announcement-copy h3 {
+      margin: 10px 0 12px;
+      color: var(--navy, #08245f);
+      font-size: 25px;
+      line-height: 1.35;
+    }
+
+    .community-announcement-meta {
+      display: grid;
+      gap: 11px;
+      margin: 0;
+      color: #53646a;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .community-announcement-meta strong {
+      color: var(--navy, #08245f);
+    }
+
+    .community-board-privacy {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin-top: 18px;
+      padding: 13px 15px;
+      border: 1px solid #dce5f2;
+      border-radius: 12px;
+      background: linear-gradient(105deg, #eaf1fb, #fff9e8);
+      color: var(--navy, #08245f);
+    }
+
+    .community-board-privacy-icon {
+      flex: 0 0 auto;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .community-board-privacy strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 11px;
+    }
+
+    .community-board-privacy p {
+      margin: 0;
+      color: #53646a;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .community-board-compose {
+      display: flex;
+      justify-content: flex-end;
+      margin: 18px 0 0;
+    }
+
+    .community-board-post-button {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 11px;
+      background: #1850d9;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(29, 51, 71, .16);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 180ms ease, background-color 180ms ease;
+    }
+
+    .community-board-post-button:hover {
+      transform: translateY(-2px);
+      background: #08245f;
+    }
+
+    .community-board-post-button:active {
+      transform: translateY(0) scale(.98);
+    }
+
+    .community-board-post-button:focus-visible {
+      outline: 3px solid rgba(232, 201, 90, .8);
+      outline-offset: 3px;
+    }
+
+    #announcementFormDialog {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      opacity: 0;
+      transform: translateY(18px) scale(.985);
+      transition: opacity 190ms ease, transform 240ms cubic-bezier(.2,.75,.25,1);
+    }
+
+    #announcementFormDialog[open] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      animation: announcementDialogIn 240ms cubic-bezier(.2,.75,.25,1) both;
+    }
+
+    #announcementFormDialog.is-closing {
+      opacity: 0;
+      transform: translateY(12px) scale(.99);
+      animation: announcementDialogOut 190ms ease both;
+      pointer-events: none;
+    }
+
+    #announcementFormDialog::backdrop {
+      background: rgba(5, 20, 43, .58);
+      backdrop-filter: blur(3px);
+      animation: announcementBackdropIn 220ms ease both;
+    }
+
+    #announcementFormDialog form > div:first-child button {
+      transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+    }
+
+    #announcementFormDialog form > div:first-child button:hover {
+      color: #fff;
+      background: #1850d9;
+      transform: rotate(90deg);
+    }
+
+    #announcementFormDialog label {
+      color: #16375f;
+    }
+
+    #announcementFormDialog input:not([type="file"]),
+    #announcementFormDialog select,
+    #announcementFormDialog textarea {
+      min-height: 44px;
+      color: #102b4d;
+      background-color: #fff;
+      transition: border-color 170ms ease, box-shadow 170ms ease, background-color 170ms ease, transform 170ms ease;
+    }
+
+    #announcementFormDialog input:not([type="file"]):hover,
+    #announcementFormDialog select:hover,
+    #announcementFormDialog textarea:hover {
+      border-color: #9bb9df !important;
+      background-color: #fbfdff;
+    }
+
+    #announcementFormDialog input:not([type="file"]):focus,
+    #announcementFormDialog select:focus,
+    #announcementFormDialog textarea:focus {
+      outline: none;
+      border-color: #3978c8 !important;
+      box-shadow: 0 0 0 3px rgba(57, 120, 200, .16);
+      transform: translateY(-1px);
+    }
+
+    #announcementFormDialog select {
+      appearance: none;
+      padding-right: 42px !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231850d9' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 13px center;
+      cursor: pointer;
+    }
+
+    #announcementFormDialog select:focus {
+      background-color: #f7faff;
+    }
+
+    #announcementFormDialog input[type="date"] {
+      cursor: pointer;
+    }
+
+    #announcementFormDialog input[type="date"]::-webkit-calendar-picker-indicator {
+      padding: 5px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 160ms ease, transform 160ms ease;
+    }
+
+    #announcementFormDialog input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      background-color: #eaf2fc;
+      transform: scale(1.08);
+    }
+
+    #announcementFormDialog input[type="file"] {
+      width: 100%;
+      padding: 8px !important;
+      color: #526982;
+      background: #f8fbff;
+      cursor: pointer;
+      transition: border-color 170ms ease, box-shadow 170ms ease, background-color 170ms ease;
+    }
+
+    #announcementFormDialog input[type="file"]:hover,
+    #announcementFormDialog input[type="file"]:focus-visible {
+      border-color: #3978c8 !important;
+      background-color: #f1f7ff;
+      box-shadow: 0 0 0 3px rgba(57, 120, 200, .13);
+      outline: none;
+    }
+
+    #announcementFormDialog input[type="file"]::file-selector-button {
+      margin-right: 12px;
+      padding: 9px 13px;
+      border: 0;
+      border-radius: 7px;
+      color: #fff;
+      background: #1850d9;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    #announcementFormDialog input[type="file"]::file-selector-button:hover {
+      background: #08245f;
+      box-shadow: 0 4px 10px rgba(8, 36, 95, .2);
+      transform: translateY(-1px);
+    }
+
+    #announcementFormDialog input[type="file"]::file-selector-button:active {
+      transform: translateY(0) scale(.98);
+    }
+
+    #announcementSubmit {
+      transition: transform 170ms ease, background-color 170ms ease, box-shadow 170ms ease;
+    }
+
+    #announcementSubmit:hover:not(:disabled) {
+      background: #08245f !important;
+      box-shadow: 0 7px 16px rgba(8, 36, 95, .2);
+      transform: translateY(-2px);
+    }
+
+    #announcementSubmit:active:not(:disabled) {
+      transform: translateY(0) scale(.99);
+    }
+
+    #announcementSubmit:disabled {
+      opacity: .72;
+      cursor: wait;
+    }
+
+    @keyframes announcementDialogIn {
+      from { opacity: 0; transform: translateY(18px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes announcementDialogOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(12px) scale(.99); }
+    }
+
+    @keyframes announcementBackdropIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .community-board-post-button .plus-mark {
+      margin-right: 6px;
+      color: var(--gold, #E8C95A);
+      font-size: 18px;
+      vertical-align: -1px;
+    }
+
+    @keyframes communityBoardIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes communityBoardOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(7px); }
+    }
+
+    @media (max-width: 720px) {
+      .community-board-header-inner,
+      .community-board-content {
+        width: min(calc(100% - 24px), 1120px);
+      }
+
+      .community-board-nav {
+        width: min(calc(100% - 24px), 1120px);
+        justify-content: flex-start;
+        gap: 20px;
+      }
+
+      .community-board-hero-inner {
+        width: min(calc(100% - 24px), 1120px);
+        padding: 0;
+        grid-template-columns: 1fr;
+      }
+
+      .community-board-hero {
+        min-height: 420px;
+      }
+
+      .community-board-featured {
+        display: none;
+      }
+
+      .community-board-guide-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .community-board-header-inner {
+        width: min(calc(100% - 24px), 1120px);
+        min-height: 112px;
+      }
+
+      .community-board-brand {
+        top: 4px;
+        transform: translateX(-50%);
+      }
+
+      .community-board-brand img {
+        width: 42px;
+        height: 42px;
+      }
+
+
+      .community-board-header-actions {
+        position: absolute;
+        right: 0;
+        bottom: 8px;
+        left: 0;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .community-board-search-wrap {
+        width: min(calc(100% - 82px), 260px);
+        min-height: 36px;
+      }
+
+      .community-board-search-wrap .community-board-search {
+        min-height: 32px;
+      }
+
+      .community-board-back {
+        min-height: 36px;
+        padding: 8px 10px;
+        font-size: 10px;
+      }
+
+      .community-board-filters {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .community-announcement-card {
+        grid-template-columns: 1fr;
+      }
+
+      .community-announcement-image {
+        grid-row: 1;
+        height: 190px;
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .community-board-header-inner {
+        min-height: 112px;
+        gap: 8px;
+      }
+
+      .community-board-brand img {
+        width: 44px;
+        height: 44px;
+      }
+
+
+      .community-board-brand {
+        top: 5px;
+        transform: translateX(-50%);
+      }
+
+      .community-board-hero {
+        min-height: 370px;
+        padding: 0 0 24px;
+      }
+
+      .community-board-filters {
+        grid-template-columns: 1fr;
+      }
+
+      .community-board-search {
+        grid-column: auto;
+      }
+
+      .community-announcement-copy {
+        padding: 17px;
+      }
+
+      .community-announcement-copy h2,
+      .community-announcement-copy h3 {
+        font-size: 22px;
+      }
+
+      .community-announcement-meta {
+        font-size: 16px;
+      }
+
+      .community-robot-dock {
+        top: calc(48vh - 118px);
+        bottom: auto;
+        transform: none;
+        scale: .88;
+        transform-origin: left center;
+      }
+
+      .community-robot-dock.is-collapsed {
+        transform: translateX(calc(-100% + 38px));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .community-board-page {
+        scroll-behavior: auto;
+      }
+
+      .community-robot-dock,
+      .community-robot-launcher,
+      .community-board-page,
+      .community-board-page.is-closing,
+      .community-board-back,
+      .community-board-tab,
+      .community-board-post-button {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .community-sort-trigger,
+      .announcement-type-trigger,
+      .community-sort-chevron,
+      .announcement-type-chevron,
+      .community-sort-options,
+      .announcement-type-options,
+      .community-sort-options button,
+      .announcement-type-options button {
+        transition: none !important;
+      }
+
+      #announcementFormDialog,
+      #announcementFormDialog[open],
+      #announcementFormDialog.is-closing,
+      #announcementFormDialog::backdrop {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .community-announcement-card,
+      .community-announcement-image {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
+    }
   </style>
 </head>
 
@@ -805,16 +2323,16 @@
         <section class="welcome-preview-column" aria-label="Bantay AgapAI website preview">
           <div class="welcome-video-wrap">
             <video
-  class="welcome-video"
-  autoplay
-  muted
-  loop
-  playsinline
-  preload="metadata"
-  aria-label="Looping preview of the Bantay AgapAI website"
->
-  <source src="/welcome.mp4" type="video/mp4">
-</video>
+              class="welcome-video"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              aria-label="Looping preview of the Bantay AgapAI website"
+            >
+              <source src="/welcome.mp4" type="video/mp4">
+            </video>
           </div>
         </section>
 
@@ -1150,7 +2668,7 @@
             <label>RESIDENT SUPPORT</label>
             <h2>Report a Concern</h2>
             <p>
-              Submit a community concern and receive a reference number for tracking.
+              Submit a community concern and receive a reference number for tracking. Residents can report here; only admins publish announcements on the Community Board.
             </p>
           </div>
         </div>
@@ -1170,11 +2688,14 @@
             <label>
               Category
               <select name="category">
-                <option>General Concern</option>
-                <option>Noise / Community</option>
-                <option>Environment</option>
-                <option>Safety</option>
-                <option>Other</option>
+                <option value="General Concern">General Concern</option>
+                <option value="Lost &amp; Found">Lost &amp; Found</option>
+                <option value="Missing Pet">Missing Pet</option>
+                <option value="Missing Person">Missing Person</option>
+                <option value="Noise / Community">Noise / Community</option>
+                <option value="Environment">Environment</option>
+                <option value="Safety">Safety</option>
+                <option value="Other">Other</option>
               </select>
             </label>
           </div>
@@ -1187,6 +2708,17 @@
               required
               placeholder="Describe what happened and where."
             ></textarea>
+          </label>
+
+          <label class="complaint-photo-field">
+            Photo evidence (optional)
+            <input id="complaintPhoto" name="photo" type="file" accept="image/jpeg,image/png,image/webp">
+            <small>JPG, PNG, or WebP · up to 5 MB. Avoid including private information in the image.</small>
+            <span class="complaint-photo-selection">
+              <span id="complaintPhotoName">No photo selected</span>
+              <button id="complaintPhotoRemove" type="button" hidden>Remove photo</button>
+            </span>
+            <img id="complaintPhotoPreview" alt="Preview of the selected concern photo" hidden>
           </label>
 
           <button class="pink-btn">Submit Concern</button>
@@ -1431,28 +2963,28 @@
             </div>
 
             <div class="developer-grid" aria-label="Meet the developers">
-              <button class="developer-card scroll-reveal" type="button" data-name="John Stephen Ferrer" data-role="Lead Web Developer" data-bio="A Grade 12 ICT student and school ICT representative at SUDECO Polytechnic Integrated College, aspiring to become a Computer Engineer.">
+              <button class="developer-card scroll-reveal" type="button" data-name="John Stephen Ferrer" data-role="Lead Web Developer" data-bio="I am a Grade 12 Information and Communications Technology (ICT) student and the school ICT representative at SUDECO Polytechnic Integrated College. I have always been interested in technology and how it can be used to solve problems and make everyday life easier. My goal is to become a Computer Engineer, and I am eager to learn more about programming, web development, computer systems, and other areas of technology.&#10;&#10;As a student and ICT representative, I continue to learn new things, improve my skills, and gain experiences that help me grow both personally and academically. I enjoy exploring new ideas, working with others, and finding ways to turn simple concepts into useful and creative solutions. I also value the importance of teamwork, communication, and being open to learning from both successes and mistakes.&#10;&#10;I know that there is still a lot for me to learn, but I am willing to put in the time and effort to improve. I believe that every challenge is an opportunity to grow and that even small steps can bring me closer to my goals. In the future, I hope to use my knowledge and skills in computer engineering to create technology that helps people, solves real-world problems, and makes a positive difference in the community." data-quote="Everything happens for a reason, so just go with the flow.">
                 <img src="/ferrer.png" alt="John Stephen Ferrer">
                 <strong>JOHN STEPHEN FERRER</strong>
                 <span class="developer-position">Lead Web Developer</span>
                 <span class="developer-link">View profile ↗</span>
               </button>
 
-              <button class="developer-card scroll-reveal" type="button" data-name="Sofia Cagunot" data-role="Technical Support / QA Tester" data-bio="A Grade 12 ICT student at SUDECO Polytechnic Integrated College and a classmate of John Stephen, aspiring to become a Software Developer.">
+              <button class="developer-card scroll-reveal" type="button" data-name="Sofia Cagunot" data-role="Technical Support / QA Tester" data-bio="I am a Grade 12 Information and Communications Technology (ICT) student at SUDECO Polytechnic Integrated College and a classmate of John Stephen. I have a strong interest in technology, programming, and software development, and I hope to become a Software Engineer in the future. I enjoy learning how technology works and discovering how coding can turn simple ideas into something useful. I also want to share what I learn and encourage others to explore the world of technology.&#10;&#10;For me, learning to code takes time, patience, and practice. It can be challenging at times, but I believe that anyone who is willing to learn and keep trying can improve. Mistakes are part of the process, and every challenge teaches us something new. As I continue learning, I hope to improve my skills, share my experiences with others, and inspire more people to try coding and discover what they can create through technology." data-quote="If opportunity doesn’t knock, build your own door.">
                 <img src="/cagunot.png" alt="Sofia Cagunot">
                 <strong>SOFIA CAGUNOT</strong>
                 <span class="developer-position">Technical Support / QA Tester</span>
                 <span class="developer-link">View profile ↗</span>
               </button>
 
-              <button class="developer-card scroll-reveal" type="button" data-name="Yuanne Kighzer Gacus" data-role="Technical Support / Deployment Specialist" data-bio="A Grade 12 ICT student at SUDECO Polytechnic Integrated College and a classmate of John Stephen, aspiring to pursue a career in IT.">
+              <button class="developer-card scroll-reveal" type="button" data-name="Yuanne Kighzer Gacus" data-role="Technical Support / Deployment Specialist" data-bio="I am a Grade 12 student at SUDECO Polytechnic Integrated College and a classmate of John Stephen. I aspire to pursue a career in Information Technology (IT) because I want to learn more about technology and how it can be used to make life easier and solve everyday problems.&#10;&#10;I believe that learning never really ends because there is always something new to discover. For me, every experience, challenge, and mistake is a chance to learn something valuable and become a better version of myself. I know that reaching my goals will take time, effort, and patience, but I am willing to keep learning and improving along the way. As technology continues to grow and change, I want to develop my skills, explore new opportunities, and gain more knowledge that will help me in the future. I believe that as long as I stay curious, remain open to learning, and never give up easily, I can achieve my goals and build a future I can be proud of." data-quote="Bad decisions make good stories.">
                 <img src="/gacus.png" alt="Yuanne Kighzer Gacus">
                 <strong>YUANNE KIGHZER GACUS</strong>
                 <span class="developer-position">Technical Support / Deployment Specialist</span>
                 <span class="developer-link">View profile ↗</span>
               </button>
 
-              <button class="developer-card scroll-reveal" type="button" data-name="Karl Christian Montecillo" data-role="UI/UX Designer / Content Developer" data-bio="A Grade 12 ICT student at SUDECO Polytechnic Integrated College and a classmate of John Stephen, aspiring to pursue a career in IT.">
+              <button class="developer-card scroll-reveal" type="button" data-name="Karl Christian Montecillo" data-role="UI/UX Designer / Content Developer" data-bio="I am a Grade 12 Information and Communications Technology (ICT) student at SUDECO Polytechnic Integrated College and a classmate of John Stephen. I aspire to pursue a career in Information Technology (IT) and hope to inspire others to explore the world of web development. I believe that anyone can create a website with creativity, passion, patience, and a willingness to learn. For me, web development is not just about writing code; it is also about bringing ideas to life and creating something that others can use and enjoy.&#10;&#10;To those who dream of building their own websites, do not be afraid to start small. Every expert was once a beginner, and everyone has to start somewhere. Keep learning, practicing your skills, and improving little by little. Do not let mistakes or challenges stop you, because they are part of the learning process. Believe in your ideas, stay creative, and never stop exploring new things. With determination and consistent effort, you can turn your ideas into reality and open the door to exciting opportunities in the world of technology." data-quote="Stop waiting for opportunities to come. Start creating them through your own actions.">
                 <img src="/karl.png" alt="Karl Christian Montecillo">
                 <strong>KARL CHRISTIAN MONTECILLO</strong>
                 <span class="developer-position">UI/UX Designer / Content Developer</span>
@@ -1471,6 +3003,7 @@
         <h3 id="developerProfileName"></h3>
         <p class="profile-role" id="developerProfileRole"></p>
         <p class="profile-bio" id="developerProfileBio"></p>
+        <p class="profile-quote" id="developerProfileQuote"></p>
         <button class="profile-close" type="button">Close</button>
       </dialog>
     </section>
@@ -1585,6 +3118,185 @@
     </div>
   </footer>
 
+  <!-- Community board shortcut: public visitors can open the board; the arrow only hides this shortcut. -->
+  <aside class="community-robot-dock" id="communityRobotDock" aria-label="Community board shortcut">
+    <button
+      class="community-robot-launcher"
+      id="communityRobotOpen"
+      type="button"
+      aria-label="Open the Community Announcement Board"
+      aria-controls="communityBoardPage"
+      title="Open Community Announcement Board"
+    >
+      <span class="community-robot-label" aria-hidden="true">Community Board</span>
+      <img src="/robot.png" alt="" width="480" height="480" draggable="false">
+    </button>
+    <button
+      class="community-robot-toggle"
+      id="communityRobotToggle"
+      type="button"
+      aria-label="Hide Community Board shortcut"
+      aria-expanded="true"
+      title="Hide robot shortcut"
+    ><span aria-hidden="true">‹</span></button>
+  </aside>
+
+  <!-- Full-screen Community Announcement Board view -->
+  <section
+    class="community-board-page"
+    id="communityBoardPage"
+    aria-labelledby="communityBoardTitle"
+    hidden
+  >
+    <div class="community-board-hero">
+      <header class="community-board-header">
+        <div class="community-board-header-inner">
+          <a class="community-board-brand" id="communityBoardHome" href="#home" aria-label="Bantay AgapAI home">
+            <img src="/bantay-logo.png" alt="">
+          </a>
+          <div class="community-board-header-actions">
+            <label class="community-board-search-wrap" aria-label="Search announcements">
+              <span class="community-board-search-icon" aria-hidden="true">⌕</span>
+              <input
+                class="community-board-search"
+                id="communityBoardSearch"
+                type="search"
+                placeholder="Search announcements..."
+                aria-label="Search announcements"
+              >
+            </label>
+            <button class="community-board-back" id="communityBoardClose" type="button">
+              <span aria-hidden="true">⌂</span> Home
+            </button>
+          </div>
+        </div>
+      </header>
+      <nav class="community-board-nav" aria-label="Community board sections">
+        <a href="#communityAnnouncementList">Latest Updates</a>
+        <a href="#communityBoardGuide">Resident Guide</a>
+        <a href="#guide-board-rules">Community Rules</a>
+        <a href="https://ehotlines.e.gov.ph/" target="_blank" rel="noopener noreferrer">Emergency Help</a>
+      </nav>
+      <div class="community-board-hero-inner">
+        <div class="community-board-intro">
+          <p class="community-board-kicker">Community Updates</p>
+          <h1 class="community-board-title" id="communityBoardTitle">Community Announcement Board</h1>
+          <p class="community-board-description">
+            Lost items, found belongings, and missing community members. Help keep our barangay safe and connected.
+          </p>
+        </div>
+        <aside class="community-board-featured" aria-label="Featured announcement categories">
+          <p class="community-board-featured-label">Browse announcements</p>
+          <button class="community-board-featured-item" type="button" data-featured-type="lost-found">Lost &amp; Found</button>
+          <button class="community-board-featured-item" type="button" data-featured-type="missing-pet">Missing Pets</button>
+          <button class="community-board-featured-item" type="button" data-featured-type="missing-person">Missing Persons</button>
+        </aside>
+      </div>
+    </div>
+
+    <div class="community-board-content">
+      <nav class="community-board-tabs" id="communityBoardTabs" aria-label="Announcement types">
+        <button class="community-board-tab" type="button" data-announcement-type="all" aria-pressed="true">All Announcements</button>
+        <button class="community-board-tab" type="button" data-announcement-type="lost-found" aria-pressed="false">Lost &amp; Found</button>
+        <button class="community-board-tab" type="button" data-announcement-type="missing-pet" aria-pressed="false">Missing Pets</button>
+        <button class="community-board-tab" type="button" data-announcement-type="missing-person" aria-pressed="false">Missing Persons</button>
+      </nav>
+
+      <div class="community-board-filters" aria-label="Filter announcements">
+        <select class="community-board-select" id="communityBoardCategory" aria-label="Filter by category">
+          <option value="all">All Categories</option>
+          <option value="lost-found">Lost &amp; Found</option>
+          <option value="missing-pet">Missing Pets</option>
+          <option value="missing-person">Missing Persons</option>
+        </select>
+        <select class="community-board-select community-sort-native" id="communityBoardSort" aria-label="Sort announcements">
+          <option value="newest">Sort by: Newest</option>
+          <option value="oldest">Sort by: Oldest</option>
+        </select>
+        <div class="community-sort-picker" id="communitySortPicker">
+          <button type="button" class="community-sort-trigger" id="communitySortToggle" aria-haspopup="listbox" aria-expanded="false" aria-controls="communitySortOptions">
+            <span id="communitySortLabel">Sort by: Newest</span><span class="community-sort-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="community-sort-options" id="communitySortOptions" role="listbox" aria-label="Sort announcements" hidden>
+            <button type="button" role="option" aria-selected="true" data-community-sort-option="newest">Sort by: Newest</button>
+            <button type="button" role="option" aria-selected="false" data-community-sort-option="oldest">Sort by: Oldest</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="community-announcement-list" id="communityAnnouncementList" aria-live="polite">
+        <div class="community-announcement-empty" id="communityAnnouncementEmpty">
+          <div class="community-announcement-empty-icon" aria-hidden="true">⌕</div>
+          <h2>No announcements yet</h2>
+          <p>Barangay announcements will appear here once they are posted.</p>
+        </div>
+      </div>
+
+      <section class="community-board-guide" id="communityBoardGuide" aria-labelledby="communityBoardGuideTitle">
+        <h2 id="communityBoardGuideTitle">Resident Reporting Guide &amp; Community Rules</h2>
+        <div class="community-board-guide-grid">
+          <article class="community-board-guide-card" id="guide-lost-found">
+            <h3>Lost &amp; Found</h3>
+            <ol>
+              <li>Tell barangay staff what was lost or found, and when and where it happened.</li>
+              <li>Add a clear description or photo. Keep serial numbers, ID numbers, and private details out of public posts.</li>
+              <li>Turn found items over to barangay staff. Verify ownership with them before returning an item.</li>
+              <li>Let staff know when the item is returned so the notice can be updated.</li>
+            </ol>
+          </article>
+          <article class="community-board-guide-card" id="guide-missing-pet">
+            <h3>Missing Pets</h3>
+            <ol>
+              <li>Share a recent photo, pet description, and the date and general area last seen.</li>
+              <li>Use a safe contact method; do not publish your home address or other private details.</li>
+              <li>If you spot the pet, share the location with the owner or barangay staff. Avoid chasing an unfamiliar or frightened animal.</li>
+              <li>Update the barangay when the pet is safely found.</li>
+            </ol>
+          </article>
+          <article class="community-board-guide-card" id="guide-missing-person">
+            <h3>Missing Persons</h3>
+            <ol>
+              <li>If someone may be in immediate danger, contact barangay staff or law enforcement directly; do not rely on a public post alone.</li>
+              <li>Share an accurate recent photo and the time and general place last seen, with the family's permission.</li>
+              <li>Keep phone numbers, home addresses, and sensitive personal details private. Send tips directly to the family or authorities.</li>
+              <li>Notify barangay staff when the person is safely located so the announcement can be updated.</li>
+            </ol>
+          </article>
+          <article class="community-board-guide-card" id="guide-board-rules">
+            <h3>Community Posting Rules &amp; Emergency Help</h3>
+            <ul>
+              <li>Post only accurate information; do not make accusations or share unverified claims.</li>
+              <li>Respect privacy and get permission before sharing identifiable photos or personal details.</li>
+              <li>Barangay staff may review notices and update them when an item or person is found.</li>
+            </ul>
+            <p style="margin-top:10px">For emergency contact information, check the eGov Philippines hotline directory.</p>
+            <a href="https://ehotlines.e.gov.ph/" target="_blank" rel="noopener noreferrer">Open eGov Hotlines →</a>
+          </article>
+        </div>
+      </section>
+
+      <div class="community-board-compose">
+        <button
+          class="community-board-post-button"
+          id="communityBoardPostButton"
+          type="button"
+          data-admin-only="true"
+          hidden
+        >
+          <span class="plus-mark" aria-hidden="true">＋</span>Post an Announcement
+        </button>
+      </div>
+
+      <aside class="community-board-privacy">
+        <span class="community-board-privacy-icon" aria-hidden="true">🛡️</span>
+        <div>
+          <strong>Privacy and Verification</strong>
+          <p>Announcements should be checked by barangay staff before publication. Share personal details only when necessary and with the person's consent.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
   <!-- MODAL -->
   <div id="modal" class="modal hidden">
     <div class="modal-card">
@@ -1602,26 +3314,57 @@
       const name = document.getElementById("developerProfileName");
       const role = document.getElementById("developerProfileRole");
       const bio = document.getElementById("developerProfileBio");
+      const quote = document.getElementById("developerProfileQuote");
 
       document.querySelectorAll("#about .developer-card").forEach((card) => {
         card.addEventListener("click", () => {
           name.textContent = card.dataset.name;
           role.textContent = card.dataset.role;
           bio.textContent = card.dataset.bio;
+          quote.textContent = `“${card.dataset.quote}”`;
           dialog.showModal();
         });
       });
 
-      dialog.querySelector(".profile-close").addEventListener("click", () => dialog.close());
+      let closing = false;
+      const closeProfile = () => {
+        if (!dialog.open || closing) return;
+        closing = true;
+        dialog.classList.add("is-closing");
+        const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 190;
+        window.setTimeout(() => {
+          dialog.close();
+          dialog.classList.remove("is-closing");
+          closing = false;
+        }, delay);
+      };
+
+      dialog.querySelector(".profile-close").addEventListener("click", closeProfile);
+
+      dialog.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        closeProfile();
+      });
 
       dialog.addEventListener("click", (event) => {
-        if (event.target === dialog) dialog.close();
+        if (event.target === dialog) closeProfile();
       });
     })();
   </script>
 
   <!-- EXISTING APPLICATION SCRIPT -->
   <script src="/app.js"></script>
+
+  <script>
+    document.querySelectorAll("[data-featured-type]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const tab = document.querySelector(`#communityBoardTabs [data-announcement-type="${link.dataset.featuredType}"]`);
+        tab?.click();
+        document.getElementById("communityBoardTabs")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  </script>
 
   <!-- SERVICE IMAGE REPLACEMENT -->
   <script>
@@ -1776,6 +3519,10 @@
   <script>
     (() => {
       const welcomeOverlay = document.getElementById("welcomeOverlay");
+    if (window.location.hash === "#community-board") {
+      welcomeOverlay.hidden = true;
+      return;
+    }
       const welcomePanel = welcomeOverlay.querySelector(".welcome-panel");
       const closeButton = welcomeOverlay.querySelector(".welcome-close");
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1801,6 +3548,118 @@
         if (welcomePanel.scrollHeight <= welcomePanel.clientHeight) return;
         event.stopPropagation();
       }, { passive: true });
+    })();
+  </script>
+
+  <!-- Community board view and robot dock controls -->
+  <script>
+    (() => {
+      const board = document.getElementById("communityBoardPage");
+      const openButton = document.getElementById("communityRobotOpen");
+      const dock = document.getElementById("communityRobotDock");
+      const toggleButton = document.getElementById("communityRobotToggle");
+      const closeButton = document.getElementById("communityBoardClose");
+      const homeButton = document.getElementById("communityBoardHome");
+
+      if (!board || !openButton || !dock || !toggleButton || !closeButton || !homeButton) return;
+
+      let previousFocus = null;
+      let boardClosing = false;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const boardRoute = "#community-board";
+      const robotDockPreferenceKey = "bantayAgapAI.communityBoardShortcutHidden";
+
+      const setDockCollapsed = (collapsed) => {
+        dock.classList.toggle("is-collapsed", collapsed);
+        toggleButton.setAttribute("aria-expanded", String(!collapsed));
+        toggleButton.setAttribute(
+          "aria-label",
+          collapsed ? "Show Community Board shortcut" : "Hide Community Board shortcut"
+        );
+        toggleButton.title = collapsed ? "Show robot shortcut" : "Hide robot shortcut";
+        toggleButton.querySelector("span").textContent = collapsed ? "›" : "‹";
+      };
+
+      try {
+        setDockCollapsed(localStorage.getItem(robotDockPreferenceKey) === "true");
+      } catch {
+        setDockCollapsed(false);
+      }
+
+      const updateBoardRoute = (hash) => {
+        const url = new URL(window.location.href);
+        url.hash = hash;
+        window.history.replaceState(window.history.state, "", url);
+      };
+
+      const openBoard = () => {
+        if (!board.hidden || boardClosing) return;
+        previousFocus = document.activeElement;
+        board.classList.remove("is-closing");
+        board.hidden = false;
+        document.body.classList.add("community-board-open");
+        updateBoardRoute("community-board");
+        closeButton.focus({ preventScroll: true });
+        board.scrollTop = 0;
+      };
+
+      const closeBoard = (goHome = false) => {
+        if (board.hidden || boardClosing) return;
+        boardClosing = true;
+        board.classList.add("is-closing");
+
+        window.setTimeout(() => {
+          board.hidden = true;
+          board.classList.remove("is-closing");
+          document.body.classList.remove("community-board-open");
+          boardClosing = false;
+          if (window.location.hash === boardRoute) {
+            updateBoardRoute(goHome ? "home" : "");
+          }
+
+          if (goHome) {
+            window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+          } else if (previousFocus && previousFocus.isConnected) {
+            previousFocus.focus({ preventScroll: true });
+          }
+        }, reducedMotion ? 0 : 230);
+      };
+
+      openButton.addEventListener("click", () => {
+        openButton.classList.remove("is-activating");
+        void openButton.offsetWidth;
+        openButton.classList.add("is-activating");
+        window.setTimeout(() => openButton.classList.remove("is-activating"), reducedMotion ? 0 : 340);
+        openBoard();
+      });
+      closeButton.addEventListener("click", () => closeBoard(true));
+      homeButton.addEventListener("click", event => {
+        event.preventDefault();
+        closeBoard(true);
+      });
+
+      toggleButton.addEventListener("click", () => {
+        const isCollapsed = !dock.classList.contains("is-collapsed");
+        setDockCollapsed(isCollapsed);
+        try {
+          localStorage.setItem(robotDockPreferenceKey, String(isCollapsed));
+        } catch {
+          // Keep the current visual state even when browser storage is unavailable.
+        }
+      });
+
+      document.addEventListener("keydown", event => {
+        // Let an open dialog handle Escape first; don't close the entire board
+        // underneath the Post an Announcement form.
+        if (event.key === "Escape" && !document.querySelector("dialog[open]") && !board.hidden) {
+          closeBoard();
+        }
+      });
+
+      // Keep the announcement board open after a page refresh.
+      if (window.location.hash === boardRoute) {
+        openBoard();
+      }
     })();
   </script>
 

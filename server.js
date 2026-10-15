@@ -18,13 +18,17 @@ const DB_PATH = path.join(__dirname, "data", "db.json");
 const PUBLIC_PATH = path.join(__dirname, "public");
 const PROJECT_UPLOADS_PATH = path.join(PUBLIC_PATH, "uploads", "projects");
 const MAX_PROJECT_IMAGE_BYTES = 4 * 1024 * 1024;
+const ANNOUNCEMENT_UPLOADS_PATH = path.join(PUBLIC_PATH, "uploads", "announcements");
+const MAX_ANNOUNCEMENT_IMAGE_BYTES = 5 * 1024 * 1024;
+const CONCERN_UPLOADS_PATH = path.join(PUBLIC_PATH, "uploads", "concerns");
+const MAX_CONCERN_IMAGE_BYTES = 5 * 1024 * 1024;
 
 const SESSION_COOKIE = "bantay_session";
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 const sessions = new Map();
 
 app.disable("x-powered-by");
-app.use(express.json({ limit: "6mb" }));
+app.use(express.json({ limit: "8mb" }));
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 app.use(express.static(PUBLIC_PATH));
 
@@ -87,6 +91,86 @@ async function removeProjectImage(imageUrl) {
   if (!filename || path.basename(filename) !== filename) return;
 
   await fs.rm(path.join(PROJECT_UPLOADS_PATH, filename), { force: true });
+}
+
+async function saveAnnouncementImageData(imageData) {
+  if (typeof imageData !== "string") {
+    const error = new Error("Announcement photo data is invalid.");
+    error.status = 400;
+    throw error;
+  }
+
+  const match = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/.exec(imageData);
+  if (!match || match[2].length > Math.ceil(MAX_ANNOUNCEMENT_IMAGE_BYTES * 4 / 3) + 8) {
+    const error = new Error("Use a JPEG, PNG, or WebP photo smaller than 5 MB.");
+    error.status = 400;
+    throw error;
+  }
+
+  const extension = match[1] === "jpeg" ? "jpg" : match[1];
+  const imageBuffer = Buffer.from(match[2], "base64");
+  const validImage = match[1] === "jpeg"
+    ? imageBuffer.length >= 4 && imageBuffer[0] === 0xff && imageBuffer[1] === 0xd8 && imageBuffer.at(-2) === 0xff && imageBuffer.at(-1) === 0xd9
+    : match[1] === "png"
+      ? imageBuffer.length >= 8 && imageBuffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
+      : imageBuffer.length >= 12 && imageBuffer.toString("ascii", 0, 4) === "RIFF" && imageBuffer.toString("ascii", 8, 12) === "WEBP";
+
+  if (!validImage || imageBuffer.length > MAX_ANNOUNCEMENT_IMAGE_BYTES) {
+    const error = new Error("Announcement photo is invalid or larger than 5 MB.");
+    error.status = 400;
+    throw error;
+  }
+
+  await fs.mkdir(ANNOUNCEMENT_UPLOADS_PATH, { recursive: true });
+  const filename = `${newId("announcement_image")}.${extension}`;
+  const filePath = path.join(ANNOUNCEMENT_UPLOADS_PATH, filename);
+  await fs.writeFile(filePath, imageBuffer, { flag: "wx" });
+
+  return { url: `/uploads/announcements/${filename}`, filePath };
+}
+
+async function removeAnnouncementImage(imageUrl) {
+  const prefix = "/uploads/announcements/";
+  if (typeof imageUrl !== "string" || !imageUrl.startsWith(prefix)) return;
+  const filename = imageUrl.slice(prefix.length);
+  if (!filename || path.basename(filename) !== filename) return;
+  await fs.rm(path.join(ANNOUNCEMENT_UPLOADS_PATH, filename), { force: true });
+}
+
+async function saveConcernImageData(imageData) {
+  if (typeof imageData !== "string") {
+    const error = new Error("Concern photo data is invalid.");
+    error.status = 400;
+    throw error;
+  }
+
+  const match = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/.exec(imageData);
+  if (!match || match[2].length > Math.ceil(MAX_CONCERN_IMAGE_BYTES * 4 / 3) + 8) {
+    const error = new Error("Use a JPG, PNG, or WebP photo smaller than 5 MB.");
+    error.status = 400;
+    throw error;
+  }
+
+  const [, type, encoded] = match;
+  const imageBuffer = Buffer.from(encoded, "base64");
+  const validImage = type === "jpeg"
+    ? imageBuffer.length >= 4 && imageBuffer[0] === 0xff && imageBuffer[1] === 0xd8 && imageBuffer.at(-2) === 0xff && imageBuffer.at(-1) === 0xd9
+    : type === "png"
+      ? imageBuffer.length >= 8 && imageBuffer.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))
+      : imageBuffer.length >= 12 && imageBuffer.toString("ascii", 0, 4) === "RIFF" && imageBuffer.toString("ascii", 8, 12) === "WEBP";
+
+  if (!validImage || imageBuffer.length > MAX_CONCERN_IMAGE_BYTES) {
+    const error = new Error("Concern photo is invalid or larger than 5 MB.");
+    error.status = 400;
+    throw error;
+  }
+
+  await fs.mkdir(CONCERN_UPLOADS_PATH, { recursive: true });
+  const extension = type === "jpeg" ? "jpg" : type;
+  const filename = `${newId("concern_image")}.${extension}`;
+  const filePath = path.join(CONCERN_UPLOADS_PATH, filename);
+  await fs.writeFile(filePath, imageBuffer, { flag: "wx" });
+  return { url: `/uploads/concerns/${filename}`, filePath };
 }
 
 function isValidEmail(email) {
@@ -336,6 +420,7 @@ const EMPTY_DB = {
   snapshot: DEFAULT_SNAPSHOT,
   services: DEMO_SERVICES,
   projects: DEMO_PROJECTS,
+  announcements: [],
   complaints: [],
   requests: [],
   users: []
@@ -410,6 +495,7 @@ async function ensureDb() {
   for (const key of [
     "services",
     "projects",
+    "announcements",
     "complaints",
     "requests",
     "users"
@@ -909,6 +995,16 @@ app.get(
 );
 
 app.get(
+  "/api/announcements",
+  asyncRoute(async (_req, res) => {
+    const db = await readDb();
+    res.json(db.announcements.slice().sort((a, b) => {
+      return new Date(b.createdAt || b.date || 0) - new Date(a.createdAt || a.date || 0);
+    }));
+  })
+);
+
+app.get(
   "/api/projects/:id",
   asyncRoute(async (req, res) => {
     const db = await readDb();
@@ -976,6 +1072,16 @@ app.post(
     const contact = clean(req.body?.contact, 120);
     const category = clean(req.body?.category, 80);
     const description = clean(req.body?.description, 2000);
+    const allowedCategories = [
+      "General Concern",
+      "Lost & Found",
+      "Missing Pet",
+      "Missing Person",
+      "Noise / Community",
+      "Environment",
+      "Safety",
+      "Other"
+    ];
 
     if (!name || !description) {
       return res.status(400).json({
@@ -983,7 +1089,16 @@ app.post(
       });
     }
 
+    if (category && !allowedCategories.includes(category)) {
+      return res.status(400).json({ error: "Choose a valid concern category." });
+    }
+
     const db = await readDb();
+
+    let uploadedImage = null;
+    if (req.body?.imageData) {
+      uploadedImage = await saveConcernImageData(req.body.imageData);
+    }
 
     const complaint = {
       id: newId("CMP"),
@@ -995,8 +1110,15 @@ app.post(
       createdAt: new Date().toISOString()
     };
 
+    if (uploadedImage) complaint.image = uploadedImage.url;
+
     db.complaints.unshift(complaint);
-    await writeDb(db);
+    try {
+      await writeDb(db);
+    } catch (error) {
+      if (uploadedImage) await fs.rm(uploadedImage.filePath, { force: true }).catch(() => {});
+      throw error;
+    }
 
     return res.status(201).json({
       message: "Complaint submitted successfully.",
@@ -1164,6 +1286,151 @@ app.get(
   asyncRoute(async (_req, res) => {
     const db = await readDb();
     res.json(db.projects);
+  })
+);
+
+app.post(
+  "/api/admin/announcements",
+  asyncRoute(async (req, res) => {
+    const type = clean(req.body?.type, 40);
+    const allowedTypes = ["lost-found", "missing-pet", "missing-person"];
+    const announcement = {
+      id: newId("ANN"),
+      type,
+      title: clean(req.body?.title, 120),
+      location: clean(req.body?.location, 180),
+      date: clean(req.body?.date, 30),
+      description: clean(req.body?.description, 1200),
+      reporterName: clean(req.body?.reporterName, 100),
+      contact: clean(req.body?.contact, 100),
+      status: "Missing",
+      createdAt: new Date().toISOString(),
+      createdBy: req.user.id
+    };
+
+    if (!allowedTypes.includes(type)) {
+      return res.status(400).json({ error: "Choose a valid announcement type." });
+    }
+    if (!announcement.title || !announcement.location || !announcement.date || !announcement.description) {
+      return res.status(400).json({ error: "Type, title, location, date, and description are required." });
+    }
+
+    let uploadedImage = null;
+    if (req.body?.imageData) {
+      uploadedImage = await saveAnnouncementImageData(req.body.imageData);
+      announcement.image = uploadedImage.url;
+    }
+
+    const db = await readDb();
+    db.announcements.unshift(announcement);
+    try {
+      await writeDb(db);
+    } catch (error) {
+      if (uploadedImage) await fs.rm(uploadedImage.filePath, { force: true }).catch(() => {});
+      throw error;
+    }
+
+    return res.status(201).json(announcement);
+  })
+);
+
+app.put(
+  "/api/admin/announcements/:id",
+  asyncRoute(async (req, res) => {
+    const db = await readDb();
+    const announcement = db.announcements.find(item => item.id === req.params.id);
+
+    if (!announcement) {
+      return res.status(404).json({ error: "Announcement not found." });
+    }
+
+    const type = clean(req.body?.type, 40);
+    const allowedTypes = ["lost-found", "missing-pet", "missing-person"];
+    const updatedFields = {
+      type,
+      title: clean(req.body?.title, 120),
+      location: clean(req.body?.location, 180),
+      date: clean(req.body?.date, 30),
+      description: clean(req.body?.description, 1200),
+      reporterName: clean(req.body?.reporterName, 100),
+      contact: clean(req.body?.contact, 100)
+    };
+
+    if (!allowedTypes.includes(type)) {
+      return res.status(400).json({ error: "Choose a valid announcement type." });
+    }
+    if (!updatedFields.title || !updatedFields.location || !updatedFields.date || !updatedFields.description) {
+      return res.status(400).json({ error: "Type, title, location, date, and description are required." });
+    }
+
+    let uploadedImage = null;
+    if (req.body?.imageData) {
+      uploadedImage = await saveAnnouncementImageData(req.body.imageData);
+    }
+
+    const previousImage = announcement.image;
+    const previousType = announcement.type;
+    Object.assign(announcement, updatedFields, { updatedAt: new Date().toISOString() });
+    if (type !== "lost-found" && previousType === "lost-found") {
+      announcement.status = "Missing";
+      delete announcement.foundAt;
+    }
+    if (uploadedImage) announcement.image = uploadedImage.url;
+
+    try {
+      await writeDb(db);
+    } catch (error) {
+      if (uploadedImage) await fs.rm(uploadedImage.filePath, { force: true }).catch(() => {});
+      throw error;
+    }
+
+    if (uploadedImage && previousImage) {
+      await removeAnnouncementImage(previousImage).catch(error => {
+        console.warn("Could not remove replaced announcement photo:", error);
+      });
+    }
+
+    return res.json(announcement);
+  })
+);
+
+app.patch(
+  "/api/admin/announcements/:id/found",
+  asyncRoute(async (req, res) => {
+    const db = await readDb();
+    const announcement = db.announcements.find(item => item.id === req.params.id);
+
+    if (!announcement) {
+      return res.status(404).json({ error: "Announcement not found." });
+    }
+    if (!["lost-found", "missing-pet", "missing-person"].includes(announcement.type)) {
+      return res.status(400).json({ error: "This announcement type cannot be marked as found." });
+    }
+
+    announcement.status = "Found";
+    announcement.foundAt = new Date().toISOString();
+    await writeDb(db);
+    return res.json(announcement);
+  })
+);
+
+app.patch(
+  "/api/admin/announcements/:id/unmark-found",
+  asyncRoute(async (req, res) => {
+    const db = await readDb();
+    const announcement = db.announcements.find(item => item.id === req.params.id);
+
+    if (!announcement) {
+      return res.status(404).json({ error: "Announcement not found." });
+    }
+    if (!["lost-found", "missing-pet", "missing-person"].includes(announcement.type)) {
+      return res.status(400).json({ error: "This announcement type cannot be changed back to missing." });
+    }
+
+    announcement.status = "Missing";
+    delete announcement.foundAt;
+    await writeDb(db);
+    return res.json(announcement);
   })
 );
 
@@ -1394,7 +1661,7 @@ app.use((error, _req, res, _next) => {
 
   if (error.type === "entity.too.large") {
     return res.status(413).json({
-      error: "The request is too large. Choose a smaller project photo."
+      error: "The request is too large. Choose a smaller photo."
     });
   }
 
