@@ -185,8 +185,8 @@
       "name": "Barangay Staff",
       "email": "admin@barangay135.com",
       "role": "staff",
-      "salt": "6ab5b959f83e3c27d905651c606ea79c",
-      "passwordHash": "5d8a46ac65266c2fcc6a664c3df6b03546794fa886051c3086ad81d79aa2ab8fb0699ac88d7225a110abf26fc4826853999ecfd04375537da283da61fa7c9c3e",
+      "salt": "2eadb1653c596dd6ebf2da08de4a4e25",
+      "passwordHash": "99987366f820b4349528032dde475862d4f1e9bbfa6470e5c607ab9063b76500d27899d1e6431abd281da52d660d476442b264f583c5794527d6935801cb2a29",
       "createdAt": "2026-09-27T11:22:27.491Z"
     }
   ],

@@ -956,6 +956,7 @@ const GUIDE_QUESTIONS = [
 
 const GUIDE_BY_ID = new Map(GUIDE_QUESTIONS.map(item => [item.id, item]));
 let guideLanguage = "tl";
+let guideQuestionsExpanded = false;
 const GUIDE_ENGLISH = {
   1: { question: "What services are available in the barangay?", answer: "The Services section lists the services shown on this website, including barangay clearance, complaints or concerns, assistance inquiries, emergency guidance, business permit inquiries, and health services. Choose a service to see its listed steps. Availability may change, so confirm with the appropriate office first." },
   2: { question: "How do I get a Barangay Clearance?", answer: "Follow these steps for a Barangay Clearance or Barangay Certification:\n1. First confirm exactly which document the receiving office requires—Barangay Clearance, Certificate of Residency, or First-Time Jobseeker Certification. Their processes and possible fees differ.\n2. Visit Barangay 135 Hall and state the document's purpose. Before going, ask the hall for its current checklist, office hours, walk-in/appointment rules, and whether it needs originals or photocopies. I could not find an official online checklist or fee schedule for Barangay 135, so do not rely on estimated prices.\n3. Prepare a valid ID and proof of address; the barangay must confirm the actual requirements and any supporting papers for your purpose.\n4. Complete the official request form, have the documents checked, and get an assessment or Order of Payment if a fee applies.\n5. Pay only at the official cashier or City Treasurer's Office specified by the office. Get an official receipt and claim stub/release schedule.\n\nIf you are a first-time jobseeker applying for employment, say so and ask for the RA 11261 certification. If eligible and you have not used the benefit before, government fees for covered pre-employment documents, including barangay clearance, are waived. If the requested document is a City of Manila Certificate of Residency, that is a separate process from barangay clearance; see the related question below." },
@@ -1100,7 +1101,16 @@ function installGuideChatStyles() {
     ".guide-language-button:hover { transform:translateY(-1px); border-color:#376e6f; }",
     ".guide-language-button[aria-pressed='true'] { background:#376e6f; border-color:#376e6f; color:#fff; }",
     ".guide-question-menu-title { margin:0 0 10px; color:#234b61; font-size:12px; font-weight:800; letter-spacing:.06em; }",
+    ".guide-question-toggle { display:flex; width:100%; align-items:center; justify-content:space-between; gap:12px; margin:0 0 10px; padding:10px 13px; border:1px solid #c7d9eb; border-radius:12px; background:#f7fbff; color:#234b61; font:inherit; font-size:12px; font-weight:800; letter-spacing:.04em; text-align:left; cursor:pointer; transition:background .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease; }",
+    ".guide-question-toggle:hover { border-color:#6c9b9b; background:#eef7f6; box-shadow:0 4px 12px rgba(35,75,97,.10); transform:translateY(-1px); }",
+    " .guide-question-toggle:focus-visible { border-color:#376e6f; outline:3px solid rgba(55,110,111,.28); outline-offset:2px; }",
+    " .guide-question-toggle:active { transform:translateY(0) scale(.99); }",
+    ".guide-question-toggle-arrow { display:grid; width:32px; height:32px; flex:0 0 32px; place-items:center; border-radius:50%; background:#e9f1fa; transition:transform .28s cubic-bezier(.2,.75,.25,1),background .2s ease; font-size:18px; line-height:1; }",
+    " .guide-question-list-wrap { overflow:hidden; transform-origin:top; }",
+    " @media (prefers-reduced-motion: reduce) { .guide-question-toggle, .guide-question-toggle-arrow { transition:none!important; } }",
+    ".guide-question-toggle[aria-expanded='true'] .guide-question-toggle-arrow { transform:rotate(180deg); background:#dcebe9; }",
     ".guide-question-list { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 2px; }",
+    ".guide-question-list[hidden] { display:none!important; }",
     ".ai-bubble .guide-question-list { margin:12px 0 0; padding-top:11px; border-top:1px solid rgba(35,75,97,.16); }",
     ".guide-followup-prompt { display:block; margin:12px 0 0; color:#234b61; font-size:13px; font-weight:700; }",
     ".guide-sources { display:flex; flex-wrap:wrap; gap:6px 12px; margin:10px 0 0; padding-top:9px; border-top:1px solid rgba(35,75,97,.12); font-size:12px; }",
@@ -1112,7 +1122,7 @@ function installGuideChatStyles() {
     ".guide-question-button { transition:background .18s ease, border-color .18s ease, transform .18s ease; }",
     "#guideForm { display:none!important; }",
     ".guide-main > .chips { display:none!important; }",
-    "@media (max-width:600px) { #guideResult { min-height:160px; max-height:68vh; padding:12px; } .guide-chat-bubble { max-width:88%!important; } }"
+    "@media (max-width:600px) { #guideResult { min-height:160px; max-height:68vh; padding:12px; } .guide-chat-bubble { max-width:88%!important; } .guide-question-menu > .guide-question-list { max-height:180px; } }"
   ].join("\n");
 
   document.head.appendChild(style);
@@ -1254,18 +1264,91 @@ function renderGuideQuestions() {
     button.setAttribute("aria-pressed", String(guideLanguage === language));
     button.addEventListener("click", () => {
       if (guideLanguage === language) return;
+      const pageScrollY = window.scrollY;
+      const resultScrollTop = $("#guideResult")?.scrollTop ?? 0;
+      const wasExpanded = guideQuestionsExpanded;
       guideLanguage = language;
+      guideQuestionsExpanded = wasExpanded;
       renderGuideQuestions();
+
+      requestAnimationFrame(() => {
+        const newResult = $("#guideResult");
+        if (newResult) newResult.scrollTop = resultScrollTop;
+        const activeLanguageButton = $(".guide-language-button[aria-pressed='true']");
+        activeLanguageButton?.focus({ preventScroll: true });
+        window.scrollTo({ top: pageScrollY, left: 0, behavior: "auto" });
+      });
     });
     languageSwitch.appendChild(button);
   });
-  const menuTitle = document.createElement("p");
-  menuTitle.className = "guide-question-menu-title";
-  menuTitle.textContent = guideLanguage === "en" ? "QUESTIONS YOU CAN ASK" : "MGA PUWEDENG ITANONG";
-  questionMenu.append(languageSwitch, menuTitle, makeGuideQuestionList(
+  const questionToggle = document.createElement("button");
+  questionToggle.type = "button";
+  questionToggle.className = "guide-question-toggle";
+  questionToggle.setAttribute("aria-expanded", String(guideQuestionsExpanded));
+  const toggleLabel = document.createElement("span");
+  toggleLabel.textContent = guideLanguage === "en" ? "QUESTIONS YOU CAN ASK" : "MGA PUWEDENG ITANONG";
+  const toggleArrow = document.createElement("span");
+  toggleArrow.className = "guide-question-toggle-arrow";
+  toggleArrow.setAttribute("aria-hidden", "true");
+  toggleArrow.textContent = "⌄";
+  questionToggle.append(toggleLabel, toggleArrow);
+
+  const questionList = makeGuideQuestionList(
     GUIDE_QUESTIONS,
     guideLanguage === "en" ? "Questions about the barangay" : "Lahat ng tanong tungkol sa barangay"
-  ));
+  );
+  questionList.id = "guideQuestionList";
+  questionList.hidden = false;
+  const questionListWrap = document.createElement("div");
+  questionListWrap.className = "guide-question-list-wrap";
+  questionListWrap.hidden = !guideQuestionsExpanded;
+  questionListWrap.appendChild(questionList);
+  questionToggle.setAttribute("aria-controls", questionList.id);
+  let questionListAnimating = false;
+  questionToggle.addEventListener("click", () => {
+    if (questionListAnimating) return;
+    const expanded = questionToggle.getAttribute("aria-expanded") !== "true";
+    guideQuestionsExpanded = expanded;
+    questionToggle.setAttribute("aria-expanded", String(expanded));
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const duration = reduceMotion ? 0 : 260;
+
+    if (expanded) {
+      questionListWrap.hidden = false;
+      questionListWrap.style.height = "0px";
+      questionListWrap.style.opacity = "0";
+      questionListAnimating = true;
+      const animation = questionListWrap.animate(
+        [
+          { height: "0px", opacity: 0, transform: "translateY(-5px)" },
+          { height: questionListWrap.scrollHeight + "px", opacity: 1, transform: "translateY(0)" }
+        ],
+        { duration, easing: "cubic-bezier(.2,.75,.25,1)" }
+      );
+      animation.onfinish = () => {
+        questionListWrap.style.height = "";
+        questionListWrap.style.opacity = "";
+        questionListAnimating = false;
+      };
+    } else {
+      questionListAnimating = true;
+      const currentHeight = questionListWrap.getBoundingClientRect().height;
+      const animation = questionListWrap.animate(
+        [
+          { height: currentHeight + "px", opacity: 1, transform: "translateY(0)" },
+          { height: "0px", opacity: 0, transform: "translateY(-5px)" }
+        ],
+        { duration, easing: "cubic-bezier(.4,0,.2,1)" }
+      );
+      animation.onfinish = () => {
+        questionListWrap.hidden = true;
+        questionListWrap.style.height = "";
+        questionListWrap.style.opacity = "";
+        questionListAnimating = false;
+      };
+    }
+  });
+  questionMenu.append(languageSwitch, questionToggle, questionListWrap);
 
   const existingMenu = $("#guideQuestionMenu");
   if (existingMenu) existingMenu.remove();
@@ -3120,3 +3203,7 @@ Promise.all([
   loadCommunityAnnouncements(),
   restoreSession()
 ]).catch(e => console.error(e));
+
+
+
+
