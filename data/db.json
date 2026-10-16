@@ -185,15 +185,15 @@
       "name": "Barangay Staff",
       "email": "admin@barangay135.com",
       "role": "staff",
-      "salt": "2eadb1653c596dd6ebf2da08de4a4e25",
-      "passwordHash": "99987366f820b4349528032dde475862d4f1e9bbfa6470e5c607ab9063b76500d27899d1e6431abd281da52d660d476442b264f583c5794527d6935801cb2a29",
+      "salt": "022c0b7a005fa8e3815842e9e26fdce0",
+      "passwordHash": "005bbb9f16a72443a2d33da603bf292bdab619aa9eef8e9f8835634dbb10b207fadb3c4ee38a18cd9ee64d5a446d2871c82ac625ba8b7733b30412eba5dacffc",
       "createdAt": "2026-09-27T11:22:27.491Z"
     }
   ],
   "snapshot": {
-    "population": 15000,
+    "population": 15230,
     "services": 30,
-    "ongoingProjects": 8,
+    "ongoingProjects": 4,
     "satisfaction": 95
   },
   "announcements": [
